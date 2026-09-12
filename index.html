@@ -75,7 +75,7 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 <div class="toolbar">
 <div class="search-box">
 <i class="fas fa-search"></i>
-<input type="text" id="searchInput" placeholder="Search games or paste any URL (youtube.com, twitch.tv, roblox.com...)" autocomplete="off">
+<input type="text" id="searchInput" placeholder="Search games or type any URL (youtube.com, twitch.tv...)" autocomplete="off">
 <button id="clearSearchBtn"><i class="fas fa-times"></i> <span>Clear</span></button>
 </div>
 <div class="filter-chips" id="filterChips">
@@ -104,6 +104,7 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 <h2 id="playerGameTitle">Game Title</h2>
 </div>
 <div class="player-actions">
+<button class="player-btn" id="openExternalBtn" title="Open in new tab"><i class="fas fa-external-link-alt"></i></button>
 <button class="player-btn" id="reloadGameBtn" title="Reload"><i class="fas fa-sync-alt"></i></button>
 <button class="player-btn" id="fullscreenBtn" title="Fullscreen"><i class="fas fa-expand"></i></button>
 <button class="player-btn close-btn" id="closePlayerBtn" title="Close"><i class="fas fa-times"></i></button>
@@ -114,7 +115,7 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 </div>
 <div class="player-footer">
 <span id="playerCategory"><i class="fas fa-tag"></i> category</span>
-<span><i class="fas fa-info-circle"></i> Some sites block embedding</span>
+<span><i class="fas fa-info-circle"></i> If site blocks embedding, use the external-link button</span>
 </div>
 </div>
 </div>
@@ -166,6 +167,7 @@ var gameIframe=document.getElementById('gameIframe');
 var closePlayerBtn=document.getElementById('closePlayerBtn');
 var reloadGameBtn=document.getElementById('reloadGameBtn');
 var fullscreenBtn=document.getElementById('fullscreenBtn');
+var openExternalBtn=document.getElementById('openExternalBtn');
 
 gameCountSpan.textContent=games.length;
 
@@ -244,6 +246,11 @@ var w=document.querySelector('.player-frame-wrapper');
 if(!document.fullscreenElement){w.requestFullscreen().catch(function(e){console.log(e)})}else{document.exitFullscreen()}
 }
 
+function openExternal(){
+if(!activeGame)return;
+window.open(activeGame.url,'_blank','noopener,noreferrer');
+}
+
 filterChips.addEventListener('click',function(e){
 var chip=e.target.closest('.chip');if(!chip)return;
 document.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active')});
@@ -268,6 +275,7 @@ clearBtn.addEventListener('click',function(){searchInput.value='';searchQuery=''
 closePlayerBtn.addEventListener('click',closePlayer);
 reloadGameBtn.addEventListener('click',reloadGame);
 fullscreenBtn.addEventListener('click',toggleFullscreen);
+openExternalBtn.addEventListener('click',openExternal);
 playerModal.addEventListener('click',function(e){if(e.target===playerModal)closePlayer();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&playerModal.classList.contains('active'))closePlayer();});
 renderGames();
