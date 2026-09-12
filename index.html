@@ -169,7 +169,6 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 </div>
 <div class="player-frame-wrapper">
 
-<!-- YOUTUBE -->
 <div class="yt-ui" id="ytUI">
 <div class="yt-searchbar">
 <input type="text" id="ytSearchInput" placeholder="Search YouTube..." autocomplete="off" spellcheck="false">
@@ -185,7 +184,6 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 </div>
 </div>
 
-<!-- SHORTS -->
 <div class="shorts-ui" id="shortsUI">
 <div class="shorts-searchbar">
 <input type="text" id="shortsSearchInput" placeholder="Search shorts..." autocomplete="off" spellcheck="false">
@@ -196,7 +194,6 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 </div>
 </div>
 
-<!-- SOUNDCLOUD -->
 <div class="sc-ui" id="scUI">
 <div class="sc-topbar">
 <input type="text" id="scSearchInput" placeholder="Search SoundCloud songs, artists..." autocomplete="off" spellcheck="false">
@@ -229,6 +226,7 @@ window.open = function(){ return null; };
 
 var YT_API_KEY = "AIzaSyCHKIjtv0LjNaaUT2euBuxwr7GE1D85IKU";
 var SC_CLIENT_ID = "Pb72ranhoyt6gw7hM7TkzUItXlMWSNSo";
+var SC_PROXY = "https://corsproxy.io/?url=";
 
 var games=[
 {id:"youtube",title:"YouTube",category:"streaming",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming","watch"],youtube:true},
@@ -471,14 +469,16 @@ shortsSearchInput.addEventListener('keydown',function(e){
 if(e.key==='Enter'){e.preventDefault();shortsSearchBtn.click();}
 });
 
+/* SoundCloud search via CORS proxy */
 function scSearch(){
 var q=scSearchInput.value.trim();
 if(q==='')return;
 scResults.innerHTML='<div class="yt-loading"><i class="fas fa-spinner fa-spin"></i> Searching SoundCloud...</div>';
-var url='https://api-v2.soundcloud.com/search/tracks?q='+encodeURIComponent(q)+'&client_id='+SC_CLIENT_ID+'&limit=30&app_version=1789138724&app_locale=en';
+var target='https://api-v2.soundcloud.com/search/tracks?q='+encodeURIComponent(q)+'&client_id='+SC_CLIENT_ID+'&limit=30&app_version=1789138724&app_locale=en';
+var url=SC_PROXY+encodeURIComponent(target);
 fetch(url).then(function(r){return r.json()}).then(function(data){
 if(!data.collection||data.collection.length===0){
-scResults.innerHTML='<div class="yt-empty">No tracks found. If this is empty and you know tracks exist, the SoundCloud client_id expired — refresh it from soundcloud.com DevTools.</div>';
+scResults.innerHTML='<div class="yt-empty">No tracks found.</div>';
 return;
 }
 var html='';
