@@ -114,15 +114,15 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 .sc-player-bar{padding:.6rem .8rem;background:#111;border-top:1px solid #222;flex-shrink:0}
 .sc-player-bar iframe{width:100%;height:120px;border:none;border-radius:.6rem;display:block}
 
-.ddg-ui{display:none;flex-direction:column;width:100%;height:100%;background:#fff;color:#222;overflow:hidden}
-.ddg-ui.active{display:flex}
-.ddg-topbar{display:flex;align-items:center;gap:.5rem;padding:.6rem .8rem;background:#de5833;flex-shrink:0}
-.ddg-topbar input{flex:1;background:#fff;border:none;border-radius:2rem;padding:.7rem 1.2rem;color:#222;font-size:.95rem;outline:none}
-.ddg-topbar input::placeholder{color:#888}
-.ddg-topbar button{background:rgba(0,0,0,.2);border:none;color:#fff;font-weight:600;padding:.7rem 1.3rem;border-radius:2rem;cursor:pointer;font-size:.85rem;display:flex;align-items:center;gap:.3rem}
-.ddg-topbar button:hover{background:rgba(0,0,0,.3)}
-.ddg-frame{flex:1;background:#fff}
-.ddg-frame iframe{width:100%;height:100%;border:none;display:block;background:#fff}
+.mj-ui{display:none;flex-direction:column;width:100%;height:100%;background:#fff;color:#222;overflow:hidden}
+.mj-ui.active{display:flex}
+.mj-topbar{display:flex;align-items:center;gap:.5rem;padding:.6rem .8rem;background:#2a2f3a;flex-shrink:0}
+.mj-topbar input{flex:1;background:#fff;border:none;border-radius:2rem;padding:.7rem 1.2rem;color:#222;font-size:.95rem;outline:none}
+.mj-topbar input::placeholder{color:#888}
+.mj-topbar button{background:#4f7aa6;border:none;color:#fff;font-weight:600;padding:.7rem 1.3rem;border-radius:2rem;cursor:pointer;font-size:.85rem;display:flex;align-items:center;gap:.3rem}
+.mj-topbar button:hover{background:#5f8fc0}
+.mj-frame{flex:1;background:#fff}
+.mj-frame iframe{width:100%;height:100%;border:none;display:block;background:#fff}
 
 .player-footer{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.2rem;background:#101b29;border-top:1px solid #1e2c3c;font-size:.8rem;color:#7b8fa6;flex-shrink:0;gap:1rem;flex-wrap:wrap}
 .player-footer i{color:#4f7aa6;margin-right:.3rem}
@@ -214,13 +214,13 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 </div>
 </div>
 
-<div class="ddg-ui" id="ddgUI">
-<div class="ddg-topbar">
-<input type="text" id="ddgSearchInput" placeholder="Search DuckDuckGo..." autocomplete="off" spellcheck="false">
-<button id="ddgSearchBtn"><i class="fas fa-search"></i> Search</button>
+<div class="mj-ui" id="mjUI">
+<div class="mj-topbar">
+<input type="text" id="mjSearchInput" placeholder="Search Mojeek..." autocomplete="off" spellcheck="false">
+<button id="mjSearchBtn"><i class="fas fa-search"></i> Search</button>
 </div>
-<div class="ddg-frame">
-<iframe id="ddgFrame" src="https://html.duckduckgo.com/html/" allowfullscreen></iframe>
+<div class="mj-frame">
+<iframe id="mjFrame" src="https://www.mojeek.com/" allowfullscreen></iframe>
 </div>
 </div>
 
@@ -252,7 +252,7 @@ var scTracks=[
 ];
 
 var games=[
-{id:"duckduckgo",title:"DuckDuckGo",category:"search",icon:"fa-solid fa-magnifying-glass",tags:["search","duckduckgo","web","browse"],ddg:true},
+{id:"mojeek",title:"Mojeek",category:"search",icon:"fa-solid fa-magnifying-glass",tags:["search","mojeek","web","browse"],mojeek:true},
 {id:"youtube",title:"YouTube",category:"streaming",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming","watch"],youtube:true},
 {id:"shorts",title:"Shorts",category:"streaming",icon:"fa-solid fa-mobile-screen",tags:["shorts","tiktok","fyp","vertical","video"],shorts:true},
 {id:"soundcloud",title:"SoundCloud",category:"streaming",icon:"fa-brands fa-soundcloud",tags:["music","audio","soundcloud"],soundcloud:true},
@@ -304,10 +304,10 @@ var scFilterBtn=document.getElementById('scFilterBtn');
 var scList=document.getElementById('scList');
 var scPlayer=document.getElementById('scPlayer');
 
-var ddgUI=document.getElementById('ddgUI');
-var ddgSearchInput=document.getElementById('ddgSearchInput');
-var ddgSearchBtn=document.getElementById('ddgSearchBtn');
-var ddgFrame=document.getElementById('ddgFrame');
+var mjUI=document.getElementById('mjUI');
+var mjSearchInput=document.getElementById('mjSearchInput');
+var mjSearchBtn=document.getElementById('mjSearchBtn');
+var mjFrame=document.getElementById('mjFrame');
 
 gameCountSpan.textContent=games.length;
 
@@ -331,7 +331,7 @@ function hideAllUIs(){
 ytUI.classList.remove('active');
 shortsUI.classList.remove('active');
 scUI.classList.remove('active');
-ddgUI.classList.remove('active');
+mjUI.classList.remove('active');
 gameIframe.style.display='none';
 }
 
@@ -340,13 +340,13 @@ activeGame=g;
 playerGameTitle.textContent=g.title;
 playerCategory.innerHTML='<i class="fas fa-tag"></i> '+g.category;
 
-if(g.ddg){
+if(g.mojeek){
 hideAllUIs();
-ddgUI.classList.add('active');
+mjUI.classList.add('active');
 playerModal.classList.add('active');
 document.body.style.overflow='hidden';
-ddgFrame.src='https://html.duckduckgo.com/html/';
-setTimeout(function(){ddgSearchInput.focus();},200);
+mjFrame.src='https://www.mojeek.com/';
+setTimeout(function(){mjSearchInput.focus();},200);
 return;
 }
 if(g.youtube){
@@ -416,7 +416,7 @@ setTimeout(function(){
 if(!playerModal.classList.contains('active')){
 gameIframe.src='about:blank';
 ytPlayer.src='about:blank';
-ddgFrame.src='about:blank';
+mjFrame.src='about:blank';
 shortsFeed.innerHTML='<div class="shorts-empty">Loading feed...</div>';
 hideAllUIs();
 gameIframe.style.display='block';
@@ -427,7 +427,7 @@ activeGame=null;
 
 function reloadGame(){
 if(!activeGame)return;
-if(activeGame.ddg){ddgFrame.src='https://html.duckduckgo.com/html/';return;}
+if(activeGame.mojeek){mjFrame.src='https://www.mojeek.com/';return;}
 if(activeGame.youtube){
 ytPlayer.src='about:blank';
 setTimeout(function(){ytPlayer.src='https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0';},50);
@@ -444,14 +444,14 @@ var w=document.querySelector('.player-frame-wrapper');
 if(!document.fullscreenElement){w.requestFullscreen().catch(function(e){console.log(e)})}else{document.exitFullscreen()}
 }
 
-/* ==== DuckDuckGo ==== */
-function ddgSearch(){
-var q=ddgSearchInput.value.trim();
-if(q===''){ddgFrame.src='https://html.duckduckgo.com/html/';return;}
-ddgFrame.src='https://html.duckduckgo.com/html/?q='+encodeURIComponent(q);
+/* ==== Mojeek ==== */
+function mjSearch(){
+var q=mjSearchInput.value.trim();
+if(q===''){mjFrame.src='https://www.mojeek.com/';return;}
+mjFrame.src='https://www.mojeek.com/search?q='+encodeURIComponent(q);
 }
-ddgSearchBtn.addEventListener('click',function(e){e.preventDefault();ddgSearch();});
-ddgSearchInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();ddgSearch();}});
+mjSearchBtn.addEventListener('click',function(e){e.preventDefault();mjSearch();});
+mjSearchInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();mjSearch();}});
 
 /* ==== YouTube ==== */
 function ytSearch(){
