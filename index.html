@@ -75,7 +75,7 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 <div class="toolbar">
 <div class="search-box">
 <i class="fas fa-search"></i>
-<input type="text" id="searchInput" placeholder="Search games or paste any URL (youtube.com, twitch.tv...)" autocomplete="off">
+<input type="text" id="searchInput" placeholder="Search games or paste any URL (youtube.com, twitch.tv, roblox.com...)" autocomplete="off">
 <button id="clearSearchBtn"><i class="fas fa-times"></i> <span>Clear</span></button>
 </div>
 <div class="filter-chips" id="filterChips">
@@ -169,7 +169,6 @@ var fullscreenBtn=document.getElementById('fullscreenBtn');
 
 gameCountSpan.textContent=games.length;
 
-/* AUTO-UNBLOCK: direct URL detection */
 function isURL(str){
 var pattern=/^(https?:\/\/)?([\w\-]+\.)+[a-z]{2,}(\/[\w\-./?%&=+#]*)?$/i;
 return pattern.test(str.trim());
