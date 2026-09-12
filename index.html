@@ -57,40 +57,38 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 .player-frame-wrapper{flex:1;background:#000;position:relative;overflow:hidden}
 #gameIframe{width:100%;height:100%;border:none;display:block;background:#000}
 
-/* === YOUTUBE UI === */
+/* === YOUTUBE INSIDE MODAL (no separate header) === */
 .yt-ui{display:none;flex-direction:column;width:100%;height:100%;background:#0f0f0f;color:#fff;overflow:hidden}
 .yt-ui.active{display:flex}
-.yt-bar{display:flex;align-items:center;gap:.8rem;padding:.8rem 1rem;background:#0f0f0f;border-bottom:1px solid #272727;flex-shrink:0}
-.yt-logo{display:flex;align-items:center;gap:.4rem;font-weight:700;font-size:1.1rem;color:#fff;flex-shrink:0}
-.yt-logo i{color:#ff0000;font-size:1.4rem}
-.yt-search{display:flex;align-items:center;flex:1;background:#121212;border:1px solid #303030;border-radius:2rem;padding:.3rem .3rem .3rem 1rem;max-width:640px}
-.yt-search input{flex:1;background:transparent;border:none;outline:none;color:#fff;padding:.6rem .8rem;font-size:.95rem}
-.yt-search input::placeholder{color:#888}
-.yt-search button{background:#222;border:none;color:#fff;padding:.6rem 1.2rem;border-radius:2rem;cursor:pointer;font-size:.9rem;display:flex;align-items:center;gap:.3rem}
-.yt-search button:hover{background:#303030}
-.yt-body{flex:1;display:flex;overflow:hidden}
-.yt-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.yt-player{background:#000;aspect-ratio:16/9;width:100%}
+.yt-searchbar{display:flex;align-items:center;gap:.5rem;padding:.6rem .8rem;background:#181818;border-bottom:1px solid #272727;flex-shrink:0}
+.yt-searchbar input{flex:1;background:#121212;border:1px solid #303030;border-radius:2rem;padding:.6rem 1rem;color:#fff;font-size:.9rem;outline:none}
+.yt-searchbar input::placeholder{color:#888}
+.yt-searchbar input:focus{border-color:#3ea6ff}
+.yt-searchbar button{background:#3ea6ff;border:none;color:#0f0f0f;font-weight:600;padding:.6rem 1.2rem;border-radius:2rem;cursor:pointer;font-size:.85rem;display:flex;align-items:center;gap:.3rem}
+.yt-searchbar button:hover{background:#65b8ff}
+.yt-body{flex:1;display:flex;overflow:hidden;min-height:0}
+.yt-player{background:#000;flex:1;display:flex;align-items:center;justify-content:center;min-width:0}
 .yt-player iframe{width:100%;height:100%;border:none;display:block}
-.yt-results{flex:1;overflow-y:auto;padding:.8rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;align-content:start}
+.yt-results{width:360px;overflow-y:auto;padding:.6rem;display:flex;flex-direction:column;gap:.5rem;background:#0f0f0f;border-left:1px solid #272727;flex-shrink:0}
 .yt-results::-webkit-scrollbar{width:8px}
 .yt-results::-webkit-scrollbar-thumb{background:#303030;border-radius:4px}
-.yt-item{cursor:pointer;display:flex;flex-direction:column;gap:.4rem;background:#181818;border-radius:.8rem;overflow:hidden;transition:background .15s}
+.yt-item{cursor:pointer;display:flex;gap:.6rem;padding:.4rem;border-radius:.6rem;transition:background .15s;align-items:flex-start}
 .yt-item:hover{background:#272727}
-.yt-item img{width:100%;aspect-ratio:16/9;object-fit:cover;background:#222}
-.yt-item .yt-meta{padding:.5rem .6rem .7rem;display:flex;flex-direction:column;gap:.2rem}
-.yt-item .yt-meta h4{font-size:.85rem;font-weight:600;color:#fff;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.yt-item .yt-meta span{font-size:.72rem;color:#aaa}
-.yt-empty{grid-column:1/-1;text-align:center;color:#888;padding:2rem 1rem;font-size:.9rem}
-.yt-loading{grid-column:1/-1;text-align:center;color:#888;padding:2rem 1rem;font-size:.9rem}
+.yt-item img{width:140px;height:79px;object-fit:cover;border-radius:.5rem;flex-shrink:0;background:#222}
+.yt-item .yt-meta{display:flex;flex-direction:column;gap:.2rem;min-width:0}
+.yt-item .yt-meta h4{font-size:.82rem;font-weight:600;color:#fff;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.yt-item .yt-meta span{font-size:.7rem;color:#aaa}
+.yt-empty{text-align:center;color:#888;padding:2rem 1rem;font-size:.85rem}
+.yt-loading{text-align:center;color:#888;padding:2rem 1rem;font-size:.85rem}
 
 .player-footer{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.2rem;background:#101b29;border-top:1px solid #1e2c3c;font-size:.8rem;color:#7b8fa6;flex-shrink:0;gap:1rem;flex-wrap:wrap}
 .player-footer i{color:#4f7aa6;margin-right:.3rem}
 #playerCategory{text-transform:uppercase;letter-spacing:.5px;font-weight:600;color:#8fb0d0}
 .footer{text-align:center;padding:1.5rem 0 .8rem;color:#4f617a;border-top:1px solid #1c2533;font-size:.85rem;margin-top:1rem;display:flex;justify-content:center;align-items:center;gap:1.2rem;flex-wrap:wrap}
 .footer i{color:#3f5a78;margin-right:.3rem}
-@media (max-width:700px){.player-container{height:95vh;border-radius:1rem}.player-header{padding:.7rem .9rem}.player-title h2{font-size:1rem}.player-btn{width:34px;height:34px;font-size:.85rem}.player-footer{font-size:.7rem;padding:.5rem .9rem}.player-footer span:last-child{display:none}.yt-bar{flex-wrap:wrap}.yt-search{max-width:none}}
-@media (max-width:550px){.hero h1{font-size:1.8rem}.hero{padding:1.5rem}.grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem}.search-box{padding-left:1rem}.search-box button span{display:none}.search-box button{padding:.7rem 1rem}.yt-results{grid-template-columns:1fr}}
+@media (max-width:900px){.yt-results{width:280px}}
+@media (max-width:700px){.player-container{height:95vh;border-radius:1rem}.player-header{padding:.7rem .9rem}.player-title h2{font-size:1rem}.player-btn{width:34px;height:34px;font-size:.85rem}.player-footer{font-size:.7rem;padding:.5rem .9rem}.player-footer span:last-child{display:none}.yt-body{flex-direction:column}.yt-results{width:100%;border-left:none;border-top:1px solid #272727;max-height:40%}}
+@media (max-width:550px){.hero h1{font-size:1.8rem}.hero{padding:1.5rem}.grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem}.search-box{padding-left:1rem}.search-box button span{display:none}.search-box button{padding:.7rem 1rem}}
 </style>
 </head>
 <body>
@@ -139,23 +137,18 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 </div>
 <div class="player-frame-wrapper">
 
-<!-- YOUTUBE UI -->
+<!-- YOUTUBE UI (inside modal, no separate header) -->
 <div class="yt-ui" id="ytUI">
-<div class="yt-bar">
-<div class="yt-logo"><i class="fa-brands fa-youtube"></i> YouTube</div>
-<div class="yt-search">
+<div class="yt-searchbar">
 <input type="text" id="ytSearchInput" placeholder="Search YouTube...">
-<button id="ytSearchBtn"><i class="fas fa-search"></i></button>
-</div>
+<button id="ytSearchBtn"><i class="fas fa-search"></i> Search</button>
 </div>
 <div class="yt-body">
-<div class="yt-main">
 <div class="yt-player">
-<iframe id="ytPlayer" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+<iframe id="ytPlayer" src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
 </div>
 <div class="yt-results" id="ytResults">
 <div class="yt-empty">Type a query above to search YouTube.</div>
-</div>
 </div>
 </div>
 </div>
@@ -255,6 +248,7 @@ activeGame=g;
 playerGameTitle.textContent=g.title;
 playerCategory.innerHTML='<i class="fas fa-tag"></i> '+g.category;
 if(g.youtube){
+/* YouTube opens in the SAME modal as a player, no separate app header */
 gameIframe.style.display='none';
 ytUI.classList.add('active');
 playerModal.classList.add('active');
@@ -354,7 +348,7 @@ function ytSearch(){
 var q=ytSearchInput.value.trim();
 if(q==='')return;
 ytResults.innerHTML='<div class="yt-loading"><i class="fas fa-spinner fa-spin"></i> Searching...</div>';
-var url='https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=18&q='+encodeURIComponent(q)+'&key='+YT_API_KEY;
+var url='https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=20&q='+encodeURIComponent(q)+'&key='+YT_API_KEY;
 fetch(url).then(function(r){return r.json()}).then(function(data){
 if(data.error){
 ytResults.innerHTML='<div class="yt-empty">API error: '+data.error.message+'</div>';
