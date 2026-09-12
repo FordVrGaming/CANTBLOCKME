@@ -56,13 +56,41 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 .player-btn.close-btn:hover{background:#5c2a2a;border-color:#a64f4f;color:#ffd6d6}
 .player-frame-wrapper{flex:1;background:#000;position:relative;overflow:hidden}
 #gameIframe{width:100%;height:100%;border:none;display:block;background:#000}
+
+/* === YOUTUBE UI === */
+.yt-ui{display:none;flex-direction:column;width:100%;height:100%;background:#0f0f0f;color:#fff;overflow:hidden}
+.yt-ui.active{display:flex}
+.yt-bar{display:flex;align-items:center;gap:.8rem;padding:.8rem 1rem;background:#0f0f0f;border-bottom:1px solid #272727;flex-shrink:0}
+.yt-logo{display:flex;align-items:center;gap:.4rem;font-weight:700;font-size:1.1rem;color:#fff;flex-shrink:0}
+.yt-logo i{color:#ff0000;font-size:1.4rem}
+.yt-search{display:flex;align-items:center;flex:1;background:#121212;border:1px solid #303030;border-radius:2rem;padding:.3rem .3rem .3rem 1rem;max-width:640px}
+.yt-search input{flex:1;background:transparent;border:none;outline:none;color:#fff;padding:.6rem .8rem;font-size:.95rem}
+.yt-search input::placeholder{color:#888}
+.yt-search button{background:#222;border:none;color:#fff;padding:.6rem 1.2rem;border-radius:2rem;cursor:pointer;font-size:.9rem;display:flex;align-items:center;gap:.3rem}
+.yt-search button:hover{background:#303030}
+.yt-body{flex:1;display:flex;overflow:hidden}
+.yt-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.yt-player{background:#000;aspect-ratio:16/9;width:100%}
+.yt-player iframe{width:100%;height:100%;border:none;display:block}
+.yt-results{flex:1;overflow-y:auto;padding:.8rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;align-content:start}
+.yt-results::-webkit-scrollbar{width:8px}
+.yt-results::-webkit-scrollbar-thumb{background:#303030;border-radius:4px}
+.yt-item{cursor:pointer;display:flex;flex-direction:column;gap:.4rem;background:#181818;border-radius:.8rem;overflow:hidden;transition:background .15s}
+.yt-item:hover{background:#272727}
+.yt-item img{width:100%;aspect-ratio:16/9;object-fit:cover;background:#222}
+.yt-item .yt-meta{padding:.5rem .6rem .7rem;display:flex;flex-direction:column;gap:.2rem}
+.yt-item .yt-meta h4{font-size:.85rem;font-weight:600;color:#fff;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.yt-item .yt-meta span{font-size:.72rem;color:#aaa}
+.yt-empty{grid-column:1/-1;text-align:center;color:#888;padding:2rem 1rem;font-size:.9rem}
+.yt-loading{grid-column:1/-1;text-align:center;color:#888;padding:2rem 1rem;font-size:.9rem}
+
 .player-footer{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.2rem;background:#101b29;border-top:1px solid #1e2c3c;font-size:.8rem;color:#7b8fa6;flex-shrink:0;gap:1rem;flex-wrap:wrap}
 .player-footer i{color:#4f7aa6;margin-right:.3rem}
 #playerCategory{text-transform:uppercase;letter-spacing:.5px;font-weight:600;color:#8fb0d0}
 .footer{text-align:center;padding:1.5rem 0 .8rem;color:#4f617a;border-top:1px solid #1c2533;font-size:.85rem;margin-top:1rem;display:flex;justify-content:center;align-items:center;gap:1.2rem;flex-wrap:wrap}
 .footer i{color:#3f5a78;margin-right:.3rem}
-@media (max-width:700px){.player-container{height:95vh;border-radius:1rem}.player-header{padding:.7rem .9rem}.player-title h2{font-size:1rem}.player-btn{width:34px;height:34px;font-size:.85rem}.player-footer{font-size:.7rem;padding:.5rem .9rem}.player-footer span:last-child{display:none}}
-@media (max-width:550px){.hero h1{font-size:1.8rem}.hero{padding:1.5rem}.grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem}.search-box{padding-left:1rem}.search-box button span{display:none}.search-box button{padding:.7rem 1rem}}
+@media (max-width:700px){.player-container{height:95vh;border-radius:1rem}.player-header{padding:.7rem .9rem}.player-title h2{font-size:1rem}.player-btn{width:34px;height:34px;font-size:.85rem}.player-footer{font-size:.7rem;padding:.5rem .9rem}.player-footer span:last-child{display:none}.yt-bar{flex-wrap:wrap}.yt-search{max-width:none}}
+@media (max-width:550px){.hero h1{font-size:1.8rem}.hero{padding:1.5rem}.grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem}.search-box{padding-left:1rem}.search-box button span{display:none}.search-box button{padding:.7rem 1rem}.yt-results{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -110,6 +138,29 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 </div>
 </div>
 <div class="player-frame-wrapper">
+
+<!-- YOUTUBE UI -->
+<div class="yt-ui" id="ytUI">
+<div class="yt-bar">
+<div class="yt-logo"><i class="fa-brands fa-youtube"></i> YouTube</div>
+<div class="yt-search">
+<input type="text" id="ytSearchInput" placeholder="Search YouTube...">
+<button id="ytSearchBtn"><i class="fas fa-search"></i></button>
+</div>
+</div>
+<div class="yt-body">
+<div class="yt-main">
+<div class="yt-player">
+<iframe id="ytPlayer" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+</div>
+<div class="yt-results" id="ytResults">
+<div class="yt-empty">Type a query above to search YouTube.</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- GENERIC IFRAME -->
 <iframe id="gameIframe" src="about:blank" frameborder="0" allowfullscreen allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write; encrypted-media; picture-in-picture" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-pointer-lock allow-orientation-lock allow-presentation allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-downloads"></iframe>
 </div>
 <div class="player-footer">
@@ -121,9 +172,14 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 
 <script>
 (function(){
+/* ============================================================
+   YOUTUBE DATA API v3 KEY
+   ============================================================ */
+var YT_API_KEY = "AIzaSyCHKIjtv0LjNaaUT2euBuxwr7GE1D85IKU";
+
 var games=[
 /* STREAMING / VIDEO */
-{id:"youtube",title:"YouTube",category:"streaming",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming","watch"],url:"https://www.youtube.com/",external:true},
+{id:"youtube",title:"YouTube",category:"streaming",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming","watch"],url:"youtube-internal",youtube:true},
 {id:"twitch",title:"Twitch",category:"streaming",icon:"fa-brands fa-twitch",tags:["streaming","twitch","live","gaming"],url:"https://www.twitch.tv/",external:true},
 {id:"netflix",title:"Netflix",category:"streaming",icon:"fa-solid fa-film",tags:["video","netflix","movies","streaming"],url:"https://www.netflix.com/",external:true},
 {id:"tiktok",title:"TikTok",category:"streaming",icon:"fa-brands fa-tiktok",tags:["video","tiktok","social","shorts"],url:"https://www.tiktok.com/",external:true},
@@ -175,6 +231,12 @@ var reloadGameBtn=document.getElementById('reloadGameBtn');
 var fullscreenBtn=document.getElementById('fullscreenBtn');
 var openExternalBtn=document.getElementById('openExternalBtn');
 
+var ytUI=document.getElementById('ytUI');
+var ytSearchInput=document.getElementById('ytSearchInput');
+var ytSearchBtn=document.getElementById('ytSearchBtn');
+var ytResults=document.getElementById('ytResults');
+var ytPlayer=document.getElementById('ytPlayer');
+
 gameCountSpan.textContent=games.length;
 
 function isURL(str){
@@ -192,8 +254,17 @@ function openGame(g){
 activeGame=g;
 playerGameTitle.textContent=g.title;
 playerCategory.innerHTML='<i class="fas fa-tag"></i> '+g.category;
+if(g.youtube){
+gameIframe.style.display='none';
+ytUI.classList.add('active');
+playerModal.classList.add('active');
+document.body.style.overflow='hidden';
+ytPlayer.src='https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0';
+return;
+}
+ytUI.classList.remove('active');
+gameIframe.style.display='block';
 if(g.external){
-/* Force external tab for sites that block iframe embedding */
 window.open(g.url,'_blank','noopener,noreferrer');
 return;
 }
@@ -245,10 +316,27 @@ if(g)openGame(g);
 function closePlayer(){
 playerModal.classList.remove('active');
 document.body.style.overflow='';
-setTimeout(function(){if(!playerModal.classList.contains('active')){gameIframe.src='about:blank';activeGame=null;}},300);
+setTimeout(function(){
+if(!playerModal.classList.contains('active')){
+gameIframe.src='about:blank';
+ytPlayer.src='about:blank';
+ytUI.classList.remove('active');
+gameIframe.style.display='block';
+activeGame=null;
+}
+},300);
 }
 
-function reloadGame(){if(!activeGame)return;gameIframe.src='about:blank';setTimeout(function(){gameIframe.src=activeGame.url;},50);}
+function reloadGame(){
+if(!activeGame)return;
+if(activeGame.youtube){
+ytPlayer.src='about:blank';
+setTimeout(function(){ytPlayer.src='https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0';},50);
+return;
+}
+gameIframe.src='about:blank';
+setTimeout(function(){gameIframe.src=activeGame.url;},50);
+}
 
 function toggleFullscreen(){
 var w=document.querySelector('.player-frame-wrapper');
@@ -257,8 +345,49 @@ if(!document.fullscreenElement){w.requestFullscreen().catch(function(e){console.
 
 function openExternal(){
 if(!activeGame)return;
+if(activeGame.youtube){window.open('https://www.youtube.com/','_blank','noopener,noreferrer');return;}
 window.open(activeGame.url,'_blank','noopener,noreferrer');
 }
+
+/* === YOUTUBE SEARCH === */
+function ytSearch(){
+var q=ytSearchInput.value.trim();
+if(q==='')return;
+ytResults.innerHTML='<div class="yt-loading"><i class="fas fa-spinner fa-spin"></i> Searching...</div>';
+var url='https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=18&q='+encodeURIComponent(q)+'&key='+YT_API_KEY;
+fetch(url).then(function(r){return r.json()}).then(function(data){
+if(data.error){
+ytResults.innerHTML='<div class="yt-empty">API error: '+data.error.message+'</div>';
+return;
+}
+if(!data.items||data.items.length===0){
+ytResults.innerHTML='<div class="yt-empty">No results for "'+q+'".</div>';
+return;
+}
+var html='';
+data.items.forEach(function(item){
+var vid=item.id.videoId;
+if(!vid)return;
+var title=item.snippet.title;
+var thumb=item.snippet.thumbnails.medium.url;
+var channel=item.snippet.channelTitle;
+var published=new Date(item.snippet.publishedAt).toLocaleDateString();
+html+='<div class="yt-item" data-vid="'+vid+'"><img src="'+thumb+'" alt=""><div class="yt-meta"><h4>'+title+'</h4><span>'+channel+' • '+published+'</span></div></div>';
+});
+ytResults.innerHTML=html;
+document.querySelectorAll('.yt-item').forEach(function(el){
+el.addEventListener('click',function(){
+var vid=el.getAttribute('data-vid');
+ytPlayer.src='https://www.youtube.com/embed/'+vid+'?autoplay=1&rel=0';
+});
+});
+}).catch(function(err){
+ytResults.innerHTML='<div class="yt-empty">Search error: '+err.message+'</div>';
+});
+}
+
+ytSearchBtn.addEventListener('click',ytSearch);
+ytSearchInput.addEventListener('keydown',function(e){if(e.key==='Enter'){ytSearch();}});
 
 filterChips.addEventListener('click',function(e){
 var chip=e.target.closest('.chip');if(!chip)return;
