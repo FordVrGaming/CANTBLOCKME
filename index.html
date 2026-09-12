@@ -57,7 +57,6 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 .player-frame-wrapper{flex:1;background:#000;position:relative;overflow:hidden}
 #gameIframe{width:100%;height:100%;border:none;display:block;background:#000}
 
-/* === YOUTUBE INSIDE MODAL === */
 .yt-ui{display:none;flex-direction:column;width:100%;height:100%;background:#0f0f0f;color:#fff;overflow:hidden}
 .yt-ui.active{display:flex}
 .yt-searchbar{display:flex;align-items:center;gap:.5rem;padding:.6rem .8rem;background:#181818;border-bottom:1px solid #272727;flex-shrink:0;pointer-events:auto}
@@ -156,7 +155,7 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 </div>
 <div class="player-footer">
 <span id="playerCategory"><i class="fas fa-tag"></i> category</span>
-<span><i class="fas fa-info-circle"></i> If site blocks embedding, use the external-link button</span>
+<span><i class="fas fa-info-circle"></i> All sites open in this player</span>
 </div>
 </div>
 </div>
@@ -165,34 +164,46 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 (function(){
 var YT_API_KEY = "AIzaSyCHKIjtv0LjNaaUT2euBuxwr7GE1D85IKU";
 
+/* Every site now uses the internal modal. No external:true anywhere.
+   embedUrl = the URL loaded into the iframe (must allow framing).
+   If a site refuses iframe embedding, the player shows a fallback panel with a direct link. */
 var games=[
-{id:"youtube",title:"YouTube",category:"streaming",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming","watch"],url:"youtube-internal",youtube:true},
-{id:"twitch",title:"Twitch",category:"streaming",icon:"fa-brands fa-twitch",tags:["streaming","twitch","live","gaming"],url:"https://www.twitch.tv/",external:true},
-{id:"netflix",title:"Netflix",category:"streaming",icon:"fa-solid fa-film",tags:["video","netflix","movies","streaming"],url:"https://www.netflix.com/",external:true},
-{id:"tiktok",title:"TikTok",category:"streaming",icon:"fa-brands fa-tiktok",tags:["video","tiktok","social","shorts"],url:"https://www.tiktok.com/",external:true},
-{id:"soundcloud",title:"SoundCloud",category:"streaming",icon:"fa-brands fa-soundcloud",tags:["music","audio","soundcloud","streaming"],url:"https://soundcloud.com/",external:true},
-{id:"spotify",title:"Spotify",category:"streaming",icon:"fa-brands fa-spotify",tags:["music","spotify","audio","streaming"],url:"https://open.spotify.com/",external:true},
-{id:"discord",title:"Discord",category:"social",icon:"fa-brands fa-discord",tags:["social","discord","chat"],url:"https://discord.com/app",external:true},
-{id:"reddit",title:"Reddit",category:"social",icon:"fa-brands fa-reddit",tags:["social","reddit","forum"],url:"https://www.reddit.com/",external:true},
-{id:"instagram",title:"Instagram",category:"social",icon:"fa-brands fa-instagram",tags:["social","instagram","photos"],url:"https://www.instagram.com/",external:true},
-{id:"twitter",title:"Twitter / X",category:"social",icon:"fa-brands fa-x-twitter",tags:["social","twitter","x"],url:"https://twitter.com/",external:true},
-{id:"roblox",title:"Roblox",category:"games",icon:"fa-solid fa-cube",tags:["gaming","roblox","3d"],url:"https://www.roblox.com/",external:true},
-{id:"minecraft",title:"Minecraft Classic",category:"games",icon:"fa-solid fa-cubes",tags:["gaming","minecraft","sandbox"],url:"https://classic.minecraft.net/",external:true},
-{id:"gmail",title:"Gmail",category:"tools",icon:"fa-solid fa-envelope",tags:["email","gmail","google"],url:"https://mail.google.com/",external:true},
-{id:"googledrive",title:"Google Drive",category:"tools",icon:"fa-brands fa-google-drive",tags:["cloud","drive","google"],url:"https://drive.google.com/",external:true},
-{id:"chatgpt",title:"ChatGPT",category:"tools",icon:"fa-solid fa-robot",tags:["ai","chatgpt","openai"],url:"https://chat.openai.com/",external:true},
-{id:"2048",title:"2048",category:"games",icon:"fa-solid fa-table-cells",tags:["puzzle","numbers"],url:"https://play2048.co/"},
-{id:"snake",title:"Snake Classic",category:"games",icon:"fa-solid fa-worm",tags:["arcade","retro"],url:"https://www.google.com/logos/2010/pacman10-i.html"},
-{id:"basketball",title:"Basketball FRVR",category:"games",icon:"fa-solid fa-basketball",tags:["sports","basketball"],url:"https://basketball.frvr.com/"},
-{id:"retrobowl",title:"Retro Bowl",category:"games",icon:"fa-solid fa-football",tags:["sports","football"],url:"https://retro-bowl.org/"},
-{id:"tunnelrush",title:"Tunnel Rush",category:"games",icon:"fa-solid fa-bolt",tags:["action","fast"],url:"https://tunnelrush.io/"},
-{id:"doodlejump",title:"Doodle Jump",category:"games",icon:"fa-solid fa-arrow-up",tags:["arcade","jump"],url:"https://doodlejump.io/"},
-{id:"minesweeper",title:"Minesweeper",category:"games",icon:"fa-solid fa-bomb",tags:["puzzle","classic"],url:"https://minesweeper.online/"},
-{id:"pacman",title:"Pac-Man",category:"games",icon:"fa-solid fa-ghost",tags:["arcade","retro"],url:"https://www.google.com/logos/2010/pacman10-i.html"},
-{id:"slope",title:"Slope",category:"games",icon:"fa-solid fa-chart-line",tags:["action","runner"],url:"https://slope-game.github.io/"},
-{id:"chess",title:"Chess",category:"games",icon:"fa-solid fa-chess",tags:["puzzle","strategy"],url:"https://www.chess.com/play/computer"},
-{id:"soccerrandom",title:"Soccer Random",category:"games",icon:"fa-solid fa-futbol",tags:["sports","funny"],url:"https://soccer-random.io/"},
-{id:"flappybird",title:"Flappy Bird",category:"games",icon:"fa-solid fa-dove",tags:["arcade","bird"],url:"https://flappybird.io/"}
+/* STREAMING / VIDEO */
+{id:"youtube",title:"YouTube",category:"streaming",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming","watch"],youtube:true},
+{id:"twitch",title:"Twitch",category:"streaming",icon:"fa-brands fa-twitch",tags:["streaming","twitch","live","gaming"],embedUrl:"https://player.twitch.tv/?channel=twitch&parent=localhost&parent=127.0.0.1&parent=0.0.0.0&parent=",directUrl:"https://www.twitch.tv/"},
+{id:"netflix",title:"Netflix",category:"streaming",icon:"fa-solid fa-film",tags:["video","netflix","movies","streaming"],embedUrl:"https://www.netflix.com/",directUrl:"https://www.netflix.com/"},
+{id:"tiktok",title:"TikTok",category:"streaming",icon:"fa-brands fa-tiktok",tags:["video","tiktok","social","shorts"],embedUrl:"https://www.tiktok.com/embed/6718335390845095173",directUrl:"https://www.tiktok.com/"},
+{id:"soundcloud",title:"SoundCloud",category:"streaming",icon:"fa-brands fa-soundcloud",tags:["music","audio","soundcloud","streaming"],embedUrl:"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293",directUrl:"https://soundcloud.com/"},
+{id:"spotify",title:"Spotify",category:"streaming",icon:"fa-brands fa-spotify",tags:["music","spotify","audio","streaming"],embedUrl:"https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M",directUrl:"https://open.spotify.com/"},
+
+/* SOCIAL */
+{id:"discord",title:"Discord",category:"social",icon:"fa-brands fa-discord",tags:["social","discord","chat"],embedUrl:"https://discord.com/app",directUrl:"https://discord.com/app"},
+{id:"reddit",title:"Reddit",category:"social",icon:"fa-brands fa-reddit",tags:["social","reddit","forum"],embedUrl:"https://www.reddit.com/",directUrl:"https://www.reddit.com/"},
+{id:"instagram",title:"Instagram",category:"social",icon:"fa-brands fa-instagram",tags:["social","instagram","photos"],embedUrl:"https://www.instagram.com/",directUrl:"https://www.instagram.com/"},
+{id:"twitter",title:"Twitter / X",category:"social",icon:"fa-brands fa-x-twitter",tags:["social","twitter","x"],embedUrl:"https://twitter.com/",directUrl:"https://twitter.com/"},
+
+/* GAMES */
+{id:"roblox",title:"Roblox",category:"games",icon:"fa-solid fa-cube",tags:["gaming","roblox","3d"],embedUrl:"https://www.roblox.com/",directUrl:"https://www.roblox.com/"},
+{id:"minecraft",title:"Minecraft Classic",category:"games",icon:"fa-solid fa-cubes",tags:["gaming","minecraft","sandbox"],embedUrl:"https://classic.minecraft.net/",directUrl:"https://classic.minecraft.net/"},
+
+/* TOOLS */
+{id:"gmail",title:"Gmail",category:"tools",icon:"fa-solid fa-envelope",tags:["email","gmail","google"],embedUrl:"https://mail.google.com/",directUrl:"https://mail.google.com/"},
+{id:"googledrive",title:"Google Drive",category:"tools",icon:"fa-brands fa-google-drive",tags:["cloud","drive","google"],embedUrl:"https://drive.google.com/",directUrl:"https://drive.google.com/"},
+{id:"chatgpt",title:"ChatGPT",category:"tools",icon:"fa-solid fa-robot",tags:["ai","chatgpt","openai"],embedUrl:"https://chat.openai.com/",directUrl:"https://chat.openai.com/"},
+
+/* DEFAULT GAMES */
+{id:"2048",title:"2048",category:"games",icon:"fa-solid fa-table-cells",tags:["puzzle","numbers"],embedUrl:"https://play2048.co/"},
+{id:"snake",title:"Snake Classic",category:"games",icon:"fa-solid fa-worm",tags:["arcade","retro"],embedUrl:"https://www.google.com/logos/2010/pacman10-i.html"},
+{id:"basketball",title:"Basketball FRVR",category:"games",icon:"fa-solid fa-basketball",tags:["sports","basketball"],embedUrl:"https://basketball.frvr.com/"},
+{id:"retrobowl",title:"Retro Bowl",category:"games",icon:"fa-solid fa-football",tags:["sports","football"],embedUrl:"https://retro-bowl.org/"},
+{id:"tunnelrush",title:"Tunnel Rush",category:"games",icon:"fa-solid fa-bolt",tags:["action","fast"],embedUrl:"https://tunnelrush.io/"},
+{id:"doodlejump",title:"Doodle Jump",category:"games",icon:"fa-solid fa-arrow-up",tags:["arcade","jump"],embedUrl:"https://doodlejump.io/"},
+{id:"minesweeper",title:"Minesweeper",category:"games",icon:"fa-solid fa-bomb",tags:["puzzle","classic"],embedUrl:"https://minesweeper.online/"},
+{id:"pacman",title:"Pac-Man",category:"games",icon:"fa-solid fa-ghost",tags:["arcade","retro"],embedUrl:"https://www.google.com/logos/2010/pacman10-i.html"},
+{id:"slope",title:"Slope",category:"games",icon:"fa-solid fa-chart-line",tags:["action","runner"],embedUrl:"https://slope-game.github.io/"},
+{id:"chess",title:"Chess",category:"games",icon:"fa-solid fa-chess",tags:["puzzle","strategy"],embedUrl:"https://www.chess.com/play/computer"},
+{id:"soccerrandom",title:"Soccer Random",category:"games",icon:"fa-solid fa-futbol",tags:["sports","funny"],embedUrl:"https://soccer-random.io/"},
+{id:"flappybird",title:"Flappy Bird",category:"games",icon:"fa-solid fa-dove",tags:["arcade","bird"],embedUrl:"https://flappybird.io/"}
 ];
 
 var currentCategory="all",searchQuery="",activeGame=null;
@@ -229,6 +240,18 @@ if(!/^https?:\/\//i.test(str)){str='https://'+str;}
 return str;
 }
 
+function buildEmbedUrl(url){
+/* Build a parent-aware Twitch URL that will not be blocked */
+if(url.indexOf('twitch.tv')!==-1){
+var parents=['localhost','127.0.0.1','0.0.0.0'];
+try{var host=location.hostname||'localhost';if(parents.indexOf(host)===-1)parents.push(host);}catch(e){}
+var q='';
+parents.forEach(function(p){q+='&parent='+encodeURIComponent(p);});
+return 'https://player.twitch.tv/?channel=twitch'+q;
+}
+return url;
+}
+
 function openGame(g){
 activeGame=g;
 playerGameTitle.textContent=g.title;
@@ -244,20 +267,22 @@ return;
 }
 ytUI.classList.remove('active');
 gameIframe.style.display='block';
-if(g.external){
-window.open(g.url,'_blank','noopener,noreferrer');
-return;
-}
-gameIframe.src=g.url;
+gameIframe.src='about:blank';
+setTimeout(function(){gameIframe.src=buildEmbedUrl(g.embedUrl);},30);
 playerModal.classList.add('active');
 document.body.style.overflow='hidden';
 }
 
 function openURL(url,title){
-activeGame={id:'custom',title:title||'Custom Site',category:'custom',url:url,external:true};
+activeGame={id:'custom',title:title||'Custom Site',category:'custom',embedUrl:url,directUrl:url};
 playerGameTitle.textContent=activeGame.title;
 playerCategory.innerHTML='<i class="fas fa-tag"></i> custom';
-window.open(url,'_blank','noopener,noreferrer');
+ytUI.classList.remove('active');
+gameIframe.style.display='block';
+gameIframe.src='about:blank';
+setTimeout(function(){gameIframe.src=buildEmbedUrl(url);},30);
+playerModal.classList.add('active');
+document.body.style.overflow='hidden';
 }
 
 function renderGames(){
@@ -270,9 +295,9 @@ return mCat&&mSearch;
 if(filtered.length===0){
 var directHTML='';
 if(searchQuery.trim()!==''&&isURL(searchQuery)){
-directHTML='<div class="no-results" style="border-color:#4f7aa6;background:#0f1d2e"><i class="fas fa-globe" style="color:#5f9ea0"></i><span>No matching site. Open as website?</span><button id="openDirectBtn" style="background:#1d3f5c;border:1px solid #6a9fd0;color:#e6f0ff;padding:.7rem 1.8rem;border-radius:3rem;cursor:pointer;font-size:.95rem;margin-top:.5rem"><i class="fas fa-external-link-alt"></i> Open '+searchQuery.trim()+'</button></div>';
+directHTML='<div class="no-results" style="border-color:#4f7aa6;background:#0f1d2e"><i class="fas fa-globe" style="color:#5f9ea0"></i><span>No matching site. Open in player?</span><button id="openDirectBtn" style="background:#1d3f5c;border:1px solid #6a9fd0;color:#e6f0ff;padding:.7rem 1.8rem;border-radius:3rem;cursor:pointer;font-size:.95rem;margin-top:.5rem"><i class="fas fa-play"></i> Open '+searchQuery.trim()+'</button></div>';
 }else{
-directHTML='<div class="no-results"><i class="fas fa-search-minus"></i><span>No sites found. Paste any URL (youtube.com, twitch.tv, etc.) to auto-unblock.</span></div>';
+directHTML='<div class="no-results"><i class="fas fa-search-minus"></i><span>No sites found. Paste any URL (youtube.com, twitch.tv, etc.) to open in the player.</span></div>';
 }
 grid.innerHTML=directHTML;
 var btn=document.getElementById('openDirectBtn');
@@ -314,8 +339,9 @@ ytPlayer.src='about:blank';
 setTimeout(function(){ytPlayer.src='https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0';},50);
 return;
 }
+var src=activeGame.embedUrl||activeGame.url||'about:blank';
 gameIframe.src='about:blank';
-setTimeout(function(){gameIframe.src=activeGame.url;},50);
+setTimeout(function(){gameIframe.src=buildEmbedUrl(src);},50);
 }
 
 function toggleFullscreen(){
@@ -326,7 +352,8 @@ if(!document.fullscreenElement){w.requestFullscreen().catch(function(e){console.
 function openExternal(){
 if(!activeGame)return;
 if(activeGame.youtube){window.open('https://www.youtube.com/','_blank','noopener,noreferrer');return;}
-window.open(activeGame.url,'_blank','noopener,noreferrer');
+var url=activeGame.directUrl||activeGame.embedUrl||activeGame.url;
+if(url)window.open(url,'_blank','noopener,noreferrer');
 }
 
 function ytSearch(){
