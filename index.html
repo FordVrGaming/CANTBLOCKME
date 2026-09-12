@@ -121,30 +121,29 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 
 <script>
 (function(){
-/* === SITES FIRST — 15 auto-unblocked platforms === */
 var games=[
 /* STREAMING / VIDEO */
-{id:"youtube",title:"YouTube",category:"streaming",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming","watch"],url:"https://www.youtube.com/embed/dQw4w9WgXcQ"},
-{id:"twitch",title:"Twitch",category:"streaming",icon:"fa-brands fa-twitch",tags:["streaming","twitch","live","gaming"],url:"https://player.twitch.tv/?channel=twitch&parent=localhost"},
-{id:"netflix",title:"Netflix",category:"streaming",icon:"fa-solid fa-film",tags:["video","netflix","movies","streaming"],url:"https://www.netflix.com/"},
-{id:"tiktok",title:"TikTok",category:"streaming",icon:"fa-brands fa-tiktok",tags:["video","tiktok","social","shorts"],url:"https://www.tiktok.com/embed/6718335390845095173"},
-{id:"soundcloud",title:"SoundCloud",category:"streaming",icon:"fa-brands fa-soundcloud",tags:["music","audio","soundcloud","streaming"],url:"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293"},
-{id:"spotify",title:"Spotify",category:"streaming",icon:"fa-brands fa-spotify",tags:["music","spotify","audio","streaming"],url:"https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M"},
+{id:"youtube",title:"YouTube",category:"streaming",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming","watch"],url:"https://www.youtube.com/",external:true},
+{id:"twitch",title:"Twitch",category:"streaming",icon:"fa-brands fa-twitch",tags:["streaming","twitch","live","gaming"],url:"https://www.twitch.tv/",external:true},
+{id:"netflix",title:"Netflix",category:"streaming",icon:"fa-solid fa-film",tags:["video","netflix","movies","streaming"],url:"https://www.netflix.com/",external:true},
+{id:"tiktok",title:"TikTok",category:"streaming",icon:"fa-brands fa-tiktok",tags:["video","tiktok","social","shorts"],url:"https://www.tiktok.com/",external:true},
+{id:"soundcloud",title:"SoundCloud",category:"streaming",icon:"fa-brands fa-soundcloud",tags:["music","audio","soundcloud","streaming"],url:"https://soundcloud.com/",external:true},
+{id:"spotify",title:"Spotify",category:"streaming",icon:"fa-brands fa-spotify",tags:["music","spotify","audio","streaming"],url:"https://open.spotify.com/",external:true},
 
 /* SOCIAL */
-{id:"discord",title:"Discord",category:"social",icon:"fa-brands fa-discord",tags:["social","discord","chat"],url:"https://discord.com/app"},
-{id:"reddit",title:"Reddit",category:"social",icon:"fa-brands fa-reddit",tags:["social","reddit","forum"],url:"https://www.reddit.com/"},
-{id:"instagram",title:"Instagram",category:"social",icon:"fa-brands fa-instagram",tags:["social","instagram","photos"],url:"https://www.instagram.com/"},
-{id:"twitter",title:"Twitter / X",category:"social",icon:"fa-brands fa-x-twitter",tags:["social","twitter","x"],url:"https://twitter.com/"},
+{id:"discord",title:"Discord",category:"social",icon:"fa-brands fa-discord",tags:["social","discord","chat"],url:"https://discord.com/app",external:true},
+{id:"reddit",title:"Reddit",category:"social",icon:"fa-brands fa-reddit",tags:["social","reddit","forum"],url:"https://www.reddit.com/",external:true},
+{id:"instagram",title:"Instagram",category:"social",icon:"fa-brands fa-instagram",tags:["social","instagram","photos"],url:"https://www.instagram.com/",external:true},
+{id:"twitter",title:"Twitter / X",category:"social",icon:"fa-brands fa-x-twitter",tags:["social","twitter","x"],url:"https://twitter.com/",external:true},
 
 /* GAMES */
-{id:"roblox",title:"Roblox",category:"games",icon:"fa-solid fa-cube",tags:["gaming","roblox","3d"],url:"https://www.roblox.com/"},
-{id:"minecraft",title:"Minecraft Classic",category:"games",icon:"fa-solid fa-cubes",tags:["gaming","minecraft","sandbox"],url:"https://classic.minecraft.net/"},
+{id:"roblox",title:"Roblox",category:"games",icon:"fa-solid fa-cube",tags:["gaming","roblox","3d"],url:"https://www.roblox.com/",external:true},
+{id:"minecraft",title:"Minecraft Classic",category:"games",icon:"fa-solid fa-cubes",tags:["gaming","minecraft","sandbox"],url:"https://classic.minecraft.net/",external:true},
 
 /* TOOLS */
-{id:"gmail",title:"Gmail",category:"tools",icon:"fa-solid fa-envelope",tags:["email","gmail","google"],url:"https://mail.google.com/"},
-{id:"googledrive",title:"Google Drive",category:"tools",icon:"fa-brands fa-google-drive",tags:["cloud","drive","google"],url:"https://drive.google.com/"},
-{id:"chatgpt",title:"ChatGPT",category:"tools",icon:"fa-solid fa-robot",tags:["ai","chatgpt","openai"],url:"https://chat.openai.com/"},
+{id:"gmail",title:"Gmail",category:"tools",icon:"fa-solid fa-envelope",tags:["email","gmail","google"],url:"https://mail.google.com/",external:true},
+{id:"googledrive",title:"Google Drive",category:"tools",icon:"fa-brands fa-google-drive",tags:["cloud","drive","google"],url:"https://drive.google.com/",external:true},
+{id:"chatgpt",title:"ChatGPT",category:"tools",icon:"fa-solid fa-robot",tags:["ai","chatgpt","openai"],url:"https://chat.openai.com/",external:true},
 
 /* === DEFAULT GAMES === */
 {id:"2048",title:"2048",category:"games",icon:"fa-solid fa-table-cells",tags:["puzzle","numbers"],url:"https://play2048.co/"},
@@ -193,18 +192,21 @@ function openGame(g){
 activeGame=g;
 playerGameTitle.textContent=g.title;
 playerCategory.innerHTML='<i class="fas fa-tag"></i> '+g.category;
+if(g.external){
+/* Force external tab for sites that block iframe embedding */
+window.open(g.url,'_blank','noopener,noreferrer');
+return;
+}
 gameIframe.src=g.url;
 playerModal.classList.add('active');
 document.body.style.overflow='hidden';
 }
 
 function openURL(url,title){
-activeGame={id:'custom',title:title||'Custom Site',category:'custom',url:url};
+activeGame={id:'custom',title:title||'Custom Site',category:'custom',url:url,external:true};
 playerGameTitle.textContent=activeGame.title;
 playerCategory.innerHTML='<i class="fas fa-tag"></i> custom';
-gameIframe.src=url;
-playerModal.classList.add('active');
-document.body.style.overflow='hidden';
+window.open(url,'_blank','noopener,noreferrer');
 }
 
 function renderGames(){
