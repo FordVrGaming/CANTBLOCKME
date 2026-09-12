@@ -75,7 +75,7 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 <div class="toolbar">
 <div class="search-box">
 <i class="fas fa-search"></i>
-<input type="text" id="searchInput" placeholder="Search games..." autocomplete="off">
+<input type="text" id="searchInput" placeholder="Search games or paste any URL (youtube.com, twitch.tv...)" autocomplete="off">
 <button id="clearSearchBtn"><i class="fas fa-times"></i> <span>Clear</span></button>
 </div>
 <div class="filter-chips" id="filterChips">
@@ -84,6 +84,7 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 <div class="chip" data-category="puzzle"><i class="fas fa-puzzle-piece"></i> Puzzle</div>
 <div class="chip" data-category="sports"><i class="fas fa-futbol"></i> Sports</div>
 <div class="chip" data-category="action"><i class="fas fa-bolt"></i> Action</div>
+<div class="chip" data-category="video"><i class="fab fa-youtube"></i> Video</div>
 </div>
 </div>
 
@@ -109,7 +110,7 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 </div>
 </div>
 <div class="player-frame-wrapper">
-<iframe id="gameIframe" src="about:blank" frameborder="0" allowfullscreen allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-pointer-lock allow-orientation-lock allow-presentation"></iframe>
+<iframe id="gameIframe" src="about:blank" frameborder="0" allowfullscreen allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write; encrypted-media; picture-in-picture" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-pointer-lock allow-orientation-lock allow-presentation allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-downloads"></iframe>
 </div>
 <div class="player-footer">
 <span id="playerCategory"><i class="fas fa-tag"></i> category</span>
@@ -132,7 +133,24 @@ var games=[
 {id:"slope",title:"Slope",category:"action",icon:"fa-solid fa-chart-line",tags:["action","runner"],url:"https://slope-game.github.io/"},
 {id:"chess",title:"Chess",category:"puzzle",icon:"fa-solid fa-chess",tags:["puzzle","strategy"],url:"https://www.chess.com/play/computer"},
 {id:"soccerrandom",title:"Soccer Random",category:"sports",icon:"fa-solid fa-futbol",tags:["sports","funny"],url:"https://soccer-random.io/"},
-{id:"flappybird",title:"Flappy Bird",category:"arcade",icon:"fa-solid fa-dove",tags:["arcade","bird"],url:"https://flappybird.io/"}
+{id:"flappybird",title:"Flappy Bird",category:"arcade",icon:"fa-solid fa-dove",tags:["arcade","bird"],url:"https://flappybird.io/"},
+
+/* === AUTO-UNBLOCKED MAJOR PLATFORMS === */
+{id:"youtube",title:"YouTube",category:"video",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming"],url:"https://www.youtube.com/embed/dQw4w9WgXcQ"},
+{id:"soundcloud",title:"SoundCloud",category:"video",icon:"fa-brands fa-soundcloud",tags:["music","audio","soundcloud","streaming"],url:"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293"},
+{id:"twitch",title:"Twitch",category:"video",icon:"fa-brands fa-twitch",tags:["streaming","twitch","live","gaming"],url:"https://player.twitch.tv/?channel=twitch&parent=localhost"},
+{id:"tiktok",title:"TikTok",category:"video",icon:"fa-brands fa-tiktok",tags:["video","tiktok","social","shorts"],url:"https://www.tiktok.com/embed/6718335390845095173"},
+{id:"netflix",title:"Netflix",category:"video",icon:"fa-solid fa-film",tags:["video","netflix","movies","streaming"],url:"https://www.netflix.com/"},
+{id:"spotify",title:"Spotify",category:"video",icon:"fa-brands fa-spotify",tags:["music","spotify","audio","streaming"],url:"https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M"},
+{id:"reddit",title:"Reddit",category:"video",icon:"fa-brands fa-reddit",tags:["social","reddit","forum"],url:"https://www.reddit.com/"},
+{id:"discord",title:"Discord",category:"video",icon:"fa-brands fa-discord",tags:["social","discord","chat"],url:"https://discord.com/app"},
+{id:"instagram",title:"Instagram",category:"video",icon:"fa-brands fa-instagram",tags:["social","instagram","photos"],url:"https://www.instagram.com/"},
+{id:"twitter",title:"Twitter / X",category:"video",icon:"fa-brands fa-x-twitter",tags:["social","twitter","x"],url:"https://twitter.com/"},
+{id:"roblox",title:"Roblox",category:"action",icon:"fa-solid fa-cube",tags:["gaming","roblox","3d"],url:"https://www.roblox.com/"},
+{id:"minecraft",title:"Minecraft Classic",category:"action",icon:"fa-solid fa-cubes",tags:["gaming","minecraft","sandbox"],url:"https://classic.minecraft.net/"},
+{id:"gmail",title:"Gmail",category:"video",icon:"fa-solid fa-envelope",tags:["email","gmail","google"],url:"https://mail.google.com/"},
+{id:"googledrive",title:"Google Drive",category:"video",icon:"fa-brands fa-google-drive",tags:["cloud","drive","google"],url:"https://drive.google.com/"},
+{id:"chatgpt",title:"ChatGPT",category:"video",icon:"fa-solid fa-robot",tags:["ai","chatgpt","openai"],url:"https://chat.openai.com/"}
 ];
 
 var currentCategory="all",searchQuery="",activeGame=null;
@@ -151,6 +169,36 @@ var fullscreenBtn=document.getElementById('fullscreenBtn');
 
 gameCountSpan.textContent=games.length;
 
+/* AUTO-UNBLOCK: direct URL detection */
+function isURL(str){
+var pattern=/^(https?:\/\/)?([\w\-]+\.)+[a-z]{2,}(\/[\w\-./?%&=+#]*)?$/i;
+return pattern.test(str.trim());
+}
+
+function normalizeURL(str){
+str=str.trim();
+if(!/^https?:\/\//i.test(str)){str='https://'+str;}
+return str;
+}
+
+function openGame(g){
+activeGame=g;
+playerGameTitle.textContent=g.title;
+playerCategory.innerHTML='<i class="fas fa-tag"></i> '+g.category;
+gameIframe.src=g.url;
+playerModal.classList.add('active');
+document.body.style.overflow='hidden';
+}
+
+function openURL(url,title){
+activeGame={id:'custom',title:title||'Custom Site',category:'custom',url:url};
+playerGameTitle.textContent=activeGame.title;
+playerCategory.innerHTML='<i class="fas fa-tag"></i> custom';
+gameIframe.src=url;
+playerModal.classList.add('active');
+document.body.style.overflow='hidden';
+}
+
 function renderGames(){
 var filtered=games.filter(function(g){
 var mCat=currentCategory==='all'||g.category===currentCategory;
@@ -158,7 +206,18 @@ var q=searchQuery.toLowerCase();
 var mSearch=searchQuery===''||g.title.toLowerCase().indexOf(q)!==-1||(g.tags&&g.tags.some(function(t){return t.toLowerCase().indexOf(q)!==-1}));
 return mCat&&mSearch;
 });
-if(filtered.length===0){grid.innerHTML='<div class="no-results"><i class="fas fa-search-minus"></i><span>No games found.</span></div>';return}
+if(filtered.length===0){
+var directHTML='';
+if(searchQuery.trim()!==''&&isURL(searchQuery)){
+directHTML='<div class="no-results" style="border-color:#4f7aa6;background:#0f1d2e"><i class="fas fa-globe" style="color:#5f9ea0"></i><span>No matching game. Open as website?</span><button id="openDirectBtn" style="background:#1d3f5c;border:1px solid #6a9fd0;color:#e6f0ff;padding:.7rem 1.8rem;border-radius:3rem;cursor:pointer;font-size:.95rem;margin-top:.5rem"><i class="fas fa-external-link-alt"></i> Open '+searchQuery.trim()+'</button></div>';
+}else{
+directHTML='<div class="no-results"><i class="fas fa-search-minus"></i><span>No games found. Paste any URL (youtube.com, twitch.tv, etc.) to auto-unblock.</span></div>';
+}
+grid.innerHTML=directHTML;
+var btn=document.getElementById('openDirectBtn');
+if(btn){btn.addEventListener('click',function(){openURL(normalizeURL(searchQuery),searchQuery.trim());});}
+return;
+}
 var html='';
 filtered.forEach(function(g){
 html+='<div class="game-card" data-id="'+g.id+'"><div class="game-thumb"><i class="'+g.icon+'"></i></div><div class="game-info"><h3>'+g.title+'</h3><div class="game-meta"><span class="tag">'+g.category+'</span><i class="fas fa-play-circle play-icon"></i></div></div></div>';
@@ -172,24 +231,20 @@ if(g)openGame(g);
 });
 });
 }
-function openGame(g){
-activeGame=g;
-playerGameTitle.textContent=g.title;
-playerCategory.innerHTML='<i class="fas fa-tag"></i> '+g.category;
-gameIframe.src=g.url;
-playerModal.classList.add('active');
-document.body.style.overflow='hidden';
-}
+
 function closePlayer(){
 playerModal.classList.remove('active');
 document.body.style.overflow='';
 setTimeout(function(){if(!playerModal.classList.contains('active')){gameIframe.src='about:blank';activeGame=null;}},300);
 }
+
 function reloadGame(){if(!activeGame)return;gameIframe.src='about:blank';setTimeout(function(){gameIframe.src=activeGame.url;},50);}
+
 function toggleFullscreen(){
 var w=document.querySelector('.player-frame-wrapper');
 if(!document.fullscreenElement){w.requestFullscreen().catch(function(e){console.log(e)})}else{document.exitFullscreen()}
 }
+
 filterChips.addEventListener('click',function(e){
 var chip=e.target.closest('.chip');if(!chip)return;
 document.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active')});
@@ -197,7 +252,19 @@ chip.classList.add('active');
 currentCategory=chip.getAttribute('data-category');
 renderGames();
 });
+
 searchInput.addEventListener('input',function(e){searchQuery=e.target.value.trim();renderGames();});
+
+searchInput.addEventListener('keydown',function(e){
+if(e.key==='Enter'&&searchQuery.trim()!==''){
+if(isURL(searchQuery)){
+openURL(normalizeURL(searchQuery),searchQuery.trim());
+}else{
+renderGames();
+}
+}
+});
+
 clearBtn.addEventListener('click',function(){searchInput.value='';searchQuery='';renderGames();searchInput.focus();});
 closePlayerBtn.addEventListener('click',closePlayer);
 reloadGameBtn.addEventListener('click',reloadGame);
