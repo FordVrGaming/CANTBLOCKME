@@ -100,15 +100,13 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 <div class="toolbar">
 <div class="search-box">
 <i class="fas fa-search"></i>
-<input type="text" id="searchInput" placeholder="Search sites or type any URL (youtube.com, twitch.tv...)" autocomplete="off">
+<input type="text" id="searchInput" placeholder="Search sites..." autocomplete="off">
 <button id="clearSearchBtn"><i class="fas fa-times"></i> <span>Clear</span></button>
 </div>
 <div class="filter-chips" id="filterChips">
 <div class="chip active" data-category="all"><i class="fas fa-layer-group"></i> All</div>
-<div class="chip" data-category="social"><i class="fas fa-users"></i> Social</div>
 <div class="chip" data-category="streaming"><i class="fas fa-play"></i> Streaming</div>
 <div class="chip" data-category="games"><i class="fas fa-gamepad"></i> Games</div>
-<div class="chip" data-category="tools"><i class="fas fa-wrench"></i> Tools</div>
 </div>
 </div>
 
@@ -128,7 +126,6 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 <h2 id="playerGameTitle">Site Title</h2>
 </div>
 <div class="player-actions">
-<button class="player-btn" id="openExternalBtn" title="Open in new tab"><i class="fas fa-external-link-alt"></i></button>
 <button class="player-btn" id="reloadGameBtn" title="Reload"><i class="fas fa-sync-alt"></i></button>
 <button class="player-btn" id="fullscreenBtn" title="Fullscreen"><i class="fas fa-expand"></i></button>
 <button class="player-btn close-btn" id="closePlayerBtn" title="Close"><i class="fas fa-times"></i></button>
@@ -155,43 +152,28 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 </div>
 <div class="player-footer">
 <span id="playerCategory"><i class="fas fa-tag"></i> category</span>
-<span><i class="fas fa-info-circle"></i> All sites open in this player</span>
+<span><i class="fas fa-info-circle"></i> Everything plays inside this player</span>
 </div>
 </div>
 </div>
 
 <script>
 (function(){
+/* Block all attempts to open a new tab/window from this page. */
+window.open = function(){ console.log('[blocked] window.open'); return null; };
+
 var YT_API_KEY = "AIzaSyCHKIjtv0LjNaaUT2euBuxwr7GE1D85IKU";
 
-/* Every site now uses the internal modal. No external:true anywhere.
-   embedUrl = the URL loaded into the iframe (must allow framing).
-   If a site refuses iframe embedding, the player shows a fallback panel with a direct link. */
+/* Only sites that reliably work inside an iframe. Everything else removed.
+   YouTube uses internal UI. Twitch uses player.twitch.tv. Spotify/SoundCloud/TikTok use official embeds.
+   All default games already embed cleanly. */
 var games=[
-/* STREAMING / VIDEO */
 {id:"youtube",title:"YouTube",category:"streaming",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming","watch"],youtube:true},
-{id:"twitch",title:"Twitch",category:"streaming",icon:"fa-brands fa-twitch",tags:["streaming","twitch","live","gaming"],embedUrl:"https://player.twitch.tv/?channel=twitch&parent=localhost&parent=127.0.0.1&parent=0.0.0.0&parent=",directUrl:"https://www.twitch.tv/"},
-{id:"netflix",title:"Netflix",category:"streaming",icon:"fa-solid fa-film",tags:["video","netflix","movies","streaming"],embedUrl:"https://www.netflix.com/",directUrl:"https://www.netflix.com/"},
-{id:"tiktok",title:"TikTok",category:"streaming",icon:"fa-brands fa-tiktok",tags:["video","tiktok","social","shorts"],embedUrl:"https://www.tiktok.com/embed/6718335390845095173",directUrl:"https://www.tiktok.com/"},
-{id:"soundcloud",title:"SoundCloud",category:"streaming",icon:"fa-brands fa-soundcloud",tags:["music","audio","soundcloud","streaming"],embedUrl:"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293",directUrl:"https://soundcloud.com/"},
-{id:"spotify",title:"Spotify",category:"streaming",icon:"fa-brands fa-spotify",tags:["music","spotify","audio","streaming"],embedUrl:"https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M",directUrl:"https://open.spotify.com/"},
+{id:"twitch",title:"Twitch",category:"streaming",icon:"fa-brands fa-twitch",tags:["streaming","twitch","live","gaming"],embedUrl:"twitch-auto"},
+{id:"spotify",title:"Spotify",category:"streaming",icon:"fa-brands fa-spotify",tags:["music","spotify","audio","streaming"],embedUrl:"https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M"},
+{id:"soundcloud",title:"SoundCloud",category:"streaming",icon:"fa-brands fa-soundcloud",tags:["music","audio","soundcloud","streaming"],embedUrl:"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293"},
+{id:"tiktok",title:"TikTok",category:"streaming",icon:"fa-brands fa-tiktok",tags:["video","tiktok","social","shorts"],embedUrl:"https://www.tiktok.com/embed/6718335390845095173"},
 
-/* SOCIAL */
-{id:"discord",title:"Discord",category:"social",icon:"fa-brands fa-discord",tags:["social","discord","chat"],embedUrl:"https://discord.com/app",directUrl:"https://discord.com/app"},
-{id:"reddit",title:"Reddit",category:"social",icon:"fa-brands fa-reddit",tags:["social","reddit","forum"],embedUrl:"https://www.reddit.com/",directUrl:"https://www.reddit.com/"},
-{id:"instagram",title:"Instagram",category:"social",icon:"fa-brands fa-instagram",tags:["social","instagram","photos"],embedUrl:"https://www.instagram.com/",directUrl:"https://www.instagram.com/"},
-{id:"twitter",title:"Twitter / X",category:"social",icon:"fa-brands fa-x-twitter",tags:["social","twitter","x"],embedUrl:"https://twitter.com/",directUrl:"https://twitter.com/"},
-
-/* GAMES */
-{id:"roblox",title:"Roblox",category:"games",icon:"fa-solid fa-cube",tags:["gaming","roblox","3d"],embedUrl:"https://www.roblox.com/",directUrl:"https://www.roblox.com/"},
-{id:"minecraft",title:"Minecraft Classic",category:"games",icon:"fa-solid fa-cubes",tags:["gaming","minecraft","sandbox"],embedUrl:"https://classic.minecraft.net/",directUrl:"https://classic.minecraft.net/"},
-
-/* TOOLS */
-{id:"gmail",title:"Gmail",category:"tools",icon:"fa-solid fa-envelope",tags:["email","gmail","google"],embedUrl:"https://mail.google.com/",directUrl:"https://mail.google.com/"},
-{id:"googledrive",title:"Google Drive",category:"tools",icon:"fa-brands fa-google-drive",tags:["cloud","drive","google"],embedUrl:"https://drive.google.com/",directUrl:"https://drive.google.com/"},
-{id:"chatgpt",title:"ChatGPT",category:"tools",icon:"fa-solid fa-robot",tags:["ai","chatgpt","openai"],embedUrl:"https://chat.openai.com/",directUrl:"https://chat.openai.com/"},
-
-/* DEFAULT GAMES */
 {id:"2048",title:"2048",category:"games",icon:"fa-solid fa-table-cells",tags:["puzzle","numbers"],embedUrl:"https://play2048.co/"},
 {id:"snake",title:"Snake Classic",category:"games",icon:"fa-solid fa-worm",tags:["arcade","retro"],embedUrl:"https://www.google.com/logos/2010/pacman10-i.html"},
 {id:"basketball",title:"Basketball FRVR",category:"games",icon:"fa-solid fa-basketball",tags:["sports","basketball"],embedUrl:"https://basketball.frvr.com/"},
@@ -219,7 +201,6 @@ var gameIframe=document.getElementById('gameIframe');
 var closePlayerBtn=document.getElementById('closePlayerBtn');
 var reloadGameBtn=document.getElementById('reloadGameBtn');
 var fullscreenBtn=document.getElementById('fullscreenBtn');
-var openExternalBtn=document.getElementById('openExternalBtn');
 
 var ytUI=document.getElementById('ytUI');
 var ytSearchInput=document.getElementById('ytSearchInput');
@@ -229,22 +210,16 @@ var ytPlayer=document.getElementById('ytPlayer');
 
 gameCountSpan.textContent=games.length;
 
-function isURL(str){
-var pattern=/^(https?:\/\/)?([\w\-]+\.)+[a-z]{2,}(\/[\w\-./?%&=+#]*)?$/i;
-return pattern.test(str.trim());
-}
-
-function normalizeURL(str){
-str=str.trim();
-if(!/^https?:\/\//i.test(str)){str='https://'+str;}
-return str;
-}
+/* Block any target=_blank link inside our own document. */
+document.addEventListener('click',function(e){
+var a=e.target.closest && e.target.closest('a');
+if(a && a.target==='_blank'){e.preventDefault();console.log('[blocked] target=_blank');}
+},true);
 
 function buildEmbedUrl(url){
-/* Build a parent-aware Twitch URL that will not be blocked */
-if(url.indexOf('twitch.tv')!==-1){
+if(url==='twitch-auto'){
 var parents=['localhost','127.0.0.1','0.0.0.0'];
-try{var host=location.hostname||'localhost';if(parents.indexOf(host)===-1)parents.push(host);}catch(e){}
+try{var host=location.hostname||'localhost';if(host&&parents.indexOf(host)===-1)parents.push(host);}catch(e){}
 var q='';
 parents.forEach(function(p){q+='&parent='+encodeURIComponent(p);});
 return 'https://player.twitch.tv/?channel=twitch'+q;
@@ -273,18 +248,6 @@ playerModal.classList.add('active');
 document.body.style.overflow='hidden';
 }
 
-function openURL(url,title){
-activeGame={id:'custom',title:title||'Custom Site',category:'custom',embedUrl:url,directUrl:url};
-playerGameTitle.textContent=activeGame.title;
-playerCategory.innerHTML='<i class="fas fa-tag"></i> custom';
-ytUI.classList.remove('active');
-gameIframe.style.display='block';
-gameIframe.src='about:blank';
-setTimeout(function(){gameIframe.src=buildEmbedUrl(url);},30);
-playerModal.classList.add('active');
-document.body.style.overflow='hidden';
-}
-
 function renderGames(){
 var filtered=games.filter(function(g){
 var mCat=currentCategory==='all'||g.category===currentCategory;
@@ -293,15 +256,7 @@ var mSearch=searchQuery===''||g.title.toLowerCase().indexOf(q)!==-1||(g.tags&&g.
 return mCat&&mSearch;
 });
 if(filtered.length===0){
-var directHTML='';
-if(searchQuery.trim()!==''&&isURL(searchQuery)){
-directHTML='<div class="no-results" style="border-color:#4f7aa6;background:#0f1d2e"><i class="fas fa-globe" style="color:#5f9ea0"></i><span>No matching site. Open in player?</span><button id="openDirectBtn" style="background:#1d3f5c;border:1px solid #6a9fd0;color:#e6f0ff;padding:.7rem 1.8rem;border-radius:3rem;cursor:pointer;font-size:.95rem;margin-top:.5rem"><i class="fas fa-play"></i> Open '+searchQuery.trim()+'</button></div>';
-}else{
-directHTML='<div class="no-results"><i class="fas fa-search-minus"></i><span>No sites found. Paste any URL (youtube.com, twitch.tv, etc.) to open in the player.</span></div>';
-}
-grid.innerHTML=directHTML;
-var btn=document.getElementById('openDirectBtn');
-if(btn){btn.addEventListener('click',function(){openURL(normalizeURL(searchQuery),searchQuery.trim());});}
+grid.innerHTML='<div class="no-results"><i class="fas fa-search-minus"></i><span>No sites found.</span></div>';
 return;
 }
 var html='';
@@ -339,21 +294,13 @@ ytPlayer.src='about:blank';
 setTimeout(function(){ytPlayer.src='https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0';},50);
 return;
 }
-var src=activeGame.embedUrl||activeGame.url||'about:blank';
 gameIframe.src='about:blank';
-setTimeout(function(){gameIframe.src=buildEmbedUrl(src);},50);
+setTimeout(function(){gameIframe.src=buildEmbedUrl(activeGame.embedUrl);},50);
 }
 
 function toggleFullscreen(){
 var w=document.querySelector('.player-frame-wrapper');
 if(!document.fullscreenElement){w.requestFullscreen().catch(function(e){console.log(e)})}else{document.exitFullscreen()}
-}
-
-function openExternal(){
-if(!activeGame)return;
-if(activeGame.youtube){window.open('https://www.youtube.com/','_blank','noopener,noreferrer');return;}
-var url=activeGame.directUrl||activeGame.embedUrl||activeGame.url;
-if(url)window.open(url,'_blank','noopener,noreferrer');
 }
 
 function ytSearch(){
@@ -408,21 +355,10 @@ renderGames();
 
 searchInput.addEventListener('input',function(e){searchQuery=e.target.value.trim();renderGames();});
 
-searchInput.addEventListener('keydown',function(e){
-if(e.key==='Enter'&&searchQuery.trim()!==''){
-if(isURL(searchQuery)){
-openURL(normalizeURL(searchQuery),searchQuery.trim());
-}else{
-renderGames();
-}
-}
-});
-
 clearBtn.addEventListener('click',function(){searchInput.value='';searchQuery='';renderGames();searchInput.focus();});
 closePlayerBtn.addEventListener('click',closePlayer);
 reloadGameBtn.addEventListener('click',reloadGame);
 fullscreenBtn.addEventListener('click',toggleFullscreen);
-openExternalBtn.addEventListener('click',openExternal);
 playerModal.addEventListener('click',function(e){if(e.target===playerModal)closePlayer();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&playerModal.classList.contains('active'))closePlayer();});
 renderGames();
