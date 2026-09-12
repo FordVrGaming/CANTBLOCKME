@@ -115,6 +115,7 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 .sc-item .sc-meta{display:flex;flex-direction:column;gap:.15rem;min-width:0}
 .sc-item .sc-meta h4{font-size:.85rem;font-weight:600;color:#fff;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .sc-item .sc-meta span{font-size:.72rem;color:#aaa}
+.sc-debug{font-size:.7rem;color:#5a6a7a;padding:.3rem .6rem;background:#0a0f16;border-radius:.4rem;margin-bottom:.4rem;font-family:monospace}
 
 .player-footer{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.2rem;background:#101b29;border-top:1px solid #1e2c3c;font-size:.8rem;color:#7b8fa6;flex-shrink:0;gap:1rem;flex-wrap:wrap}
 .player-footer i{color:#4f7aa6;margin-right:.3rem}
@@ -227,12 +228,12 @@ window.open = function(){ return null; };
 var YT_API_KEY = "AIzaSyCHKIjtv0LjNaaUT2euBuxwr7GE1D85IKU";
 var SC_CLIENT_ID = "Pb72ranhoyt6gw7hM7TkzUItXlMWSNSo";
 
-/* Multiple CORS proxies tried in order until one succeeds */
+/* Multiple CORS proxies, tried in order */
 var SC_PROXIES = [
 "https://api.allorigins.win/raw?url=",
+"https://api.codetabs.com/v1/proxy?quest=",
 "https://corsproxy.io/?url=",
-"https://thingproxy.freeboard.io/fetch/",
-"https://api.codetabs.com/v1/proxy?quest="
+"https://thingproxy.freeboard.io/fetch/"
 ];
 
 var games=[
@@ -476,30 +477,39 @@ shortsSearchInput.addEventListener('keydown',function(e){
 if(e.key==='Enter'){e.preventDefault();shortsSearchBtn.click();}
 });
 
-/* SoundCloud: try each proxy until one returns valid JSON */
+/* ===== SOUNDCLOUD SEARCH ===== */
+/* Uses multiple CORS proxies. If a proxy returns non-JSON or empty, it tries the next. */
 function scSearch(){
 var q=scSearchInput.value.trim();
 if(q==='')return;
-scResults.innerHTML='<div class="yt-loading"><i class="fas fa-spinner fa-spin"></i> Searching SoundCloud...</div>';
+scResults.innerHTML='<div class="yt-loading"><i class="fas fa-spinner fa-spin"></i> Searching SoundCloud (trying '+SC_PROXIES.length+' proxies)...</div>';
 var target='https://api-v2.soundcloud.com/search/tracks?q='+encodeURIComponent(q)+'&client_id='+SC_CLIENT_ID+'&limit=30&app_version=1789138724&app_locale=en';
-tryProxies(0,target);
+tryProxies(0,target,[]);
 }
 
-function tryProxies(i,target){
+function tryProxies(i,target,log){
 if(i>=SC_PROXIES.length){
-scResults.innerHTML='<div class="yt-empty">All CORS proxies failed. Your network is blocking them. SoundCloud search cannot work here.</div>';
+scResults.innerHTML='<div class="yt-empty">All CORS proxies failed or returned no results.<br><br><span style="font-size:.75rem;color:#5a6a7a">Attempts:<br>'+log.join('<br>')+'</span></div>';
 return;
 }
+var proxyName=SC_PROXIES[i].split('/')[2];
 var url=SC_PROXIES[i]+encodeURIComponent(target);
 fetch(url,{method:'GET'}).then(function(r){
 if(!r.ok)throw new Error('HTTP '+r.status);
-return r.json();
-}).then(function(data){
-if(!data.collection||data.collection.length===0){
-scResults.innerHTML='<div class="yt-empty">No tracks found.</div>';
-return;
+return r.text();
+}).then(function(txt){
+var data;
+try{data=JSON.parse(txt);}catch(e){
+log.push(proxyName+': non-JSON');
+throw new Error('non-JSON');
 }
-var html='';
+if(!data.collection||data.collection.length===0){
+log.push(proxyName+': empty collection');
+throw new Error('empty');
+}
+log.push(proxyName+': OK ('+data.collection.length+' tracks)');
+console.log('SoundCloud search via '+proxyName+':',data.collection.length+' tracks');
+var html='<div class="sc-debug">via '+proxyName+'</div>';
 data.collection.forEach(function(t){
 if(!t||!t.permalink_url)return;
 var title=t.title||'Untitled';
@@ -514,8 +524,9 @@ var trackUrl=el.getAttribute('data-sc');
 scPlayer.src='https://w.soundcloud.com/player/?url='+encodeURIComponent(trackUrl)+'&color=%23ff5500&auto_play=true';
 });
 });
-}).catch(function(){
-tryProxies(i+1,target);
+}).catch(function(err){
+log.push(proxyName+': '+err.message);
+tryProxies(i+1,target,log);
 });
 }
 
