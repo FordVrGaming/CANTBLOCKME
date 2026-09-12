@@ -57,14 +57,14 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 .player-frame-wrapper{flex:1;background:#000;position:relative;overflow:hidden}
 #gameIframe{width:100%;height:100%;border:none;display:block;background:#000}
 
-/* === YOUTUBE INSIDE MODAL (no separate header) === */
+/* === YOUTUBE INSIDE MODAL === */
 .yt-ui{display:none;flex-direction:column;width:100%;height:100%;background:#0f0f0f;color:#fff;overflow:hidden}
 .yt-ui.active{display:flex}
-.yt-searchbar{display:flex;align-items:center;gap:.5rem;padding:.6rem .8rem;background:#181818;border-bottom:1px solid #272727;flex-shrink:0}
-.yt-searchbar input{flex:1;background:#121212;border:1px solid #303030;border-radius:2rem;padding:.6rem 1rem;color:#fff;font-size:.9rem;outline:none}
+.yt-searchbar{display:flex;align-items:center;gap:.5rem;padding:.6rem .8rem;background:#181818;border-bottom:1px solid #272727;flex-shrink:0;pointer-events:auto}
+.yt-searchbar input{flex:1;background:#121212;border:1px solid #303030;border-radius:2rem;padding:.6rem 1rem;color:#fff;font-size:.9rem;outline:none;pointer-events:auto;user-select:text}
 .yt-searchbar input::placeholder{color:#888}
 .yt-searchbar input:focus{border-color:#3ea6ff}
-.yt-searchbar button{background:#3ea6ff;border:none;color:#0f0f0f;font-weight:600;padding:.6rem 1.2rem;border-radius:2rem;cursor:pointer;font-size:.85rem;display:flex;align-items:center;gap:.3rem}
+.yt-searchbar button{background:#3ea6ff;border:none;color:#0f0f0f;font-weight:600;padding:.6rem 1.2rem;border-radius:2rem;cursor:pointer;font-size:.85rem;display:flex;align-items:center;gap:.3rem;pointer-events:auto}
 .yt-searchbar button:hover{background:#65b8ff}
 .yt-body{flex:1;display:flex;overflow:hidden;min-height:0}
 .yt-player{background:#000;flex:1;display:flex;align-items:center;justify-content:center;min-width:0}
@@ -137,10 +137,9 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 </div>
 <div class="player-frame-wrapper">
 
-<!-- YOUTUBE UI (inside modal, no separate header) -->
 <div class="yt-ui" id="ytUI">
 <div class="yt-searchbar">
-<input type="text" id="ytSearchInput" placeholder="Search YouTube...">
+<input type="text" id="ytSearchInput" placeholder="Search YouTube..." autocomplete="off" spellcheck="false">
 <button id="ytSearchBtn"><i class="fas fa-search"></i> Search</button>
 </div>
 <div class="yt-body">
@@ -153,8 +152,7 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 </div>
 </div>
 
-<!-- GENERIC IFRAME -->
-<iframe id="gameIframe" src="about:blank" frameborder="0" allowfullscreen allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write; encrypted-media; picture-in-picture" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-pointer-lock allow-orientation-lock allow-presentation allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-downloads"></iframe>
+<iframe id="gameIframe" src="about:blank" frameborder="0" allowfullscreen allow="autoplay; fullscreen; gamepad; clipboard-read; clipboard-write; encrypted-media; picture-in-picture"></iframe>
 </div>
 <div class="player-footer">
 <span id="playerCategory"><i class="fas fa-tag"></i> category</span>
@@ -165,36 +163,24 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 
 <script>
 (function(){
-/* ============================================================
-   YOUTUBE DATA API v3 KEY
-   ============================================================ */
 var YT_API_KEY = "AIzaSyCHKIjtv0LjNaaUT2euBuxwr7GE1D85IKU";
 
 var games=[
-/* STREAMING / VIDEO */
 {id:"youtube",title:"YouTube",category:"streaming",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming","watch"],url:"youtube-internal",youtube:true},
 {id:"twitch",title:"Twitch",category:"streaming",icon:"fa-brands fa-twitch",tags:["streaming","twitch","live","gaming"],url:"https://www.twitch.tv/",external:true},
 {id:"netflix",title:"Netflix",category:"streaming",icon:"fa-solid fa-film",tags:["video","netflix","movies","streaming"],url:"https://www.netflix.com/",external:true},
 {id:"tiktok",title:"TikTok",category:"streaming",icon:"fa-brands fa-tiktok",tags:["video","tiktok","social","shorts"],url:"https://www.tiktok.com/",external:true},
 {id:"soundcloud",title:"SoundCloud",category:"streaming",icon:"fa-brands fa-soundcloud",tags:["music","audio","soundcloud","streaming"],url:"https://soundcloud.com/",external:true},
 {id:"spotify",title:"Spotify",category:"streaming",icon:"fa-brands fa-spotify",tags:["music","spotify","audio","streaming"],url:"https://open.spotify.com/",external:true},
-
-/* SOCIAL */
 {id:"discord",title:"Discord",category:"social",icon:"fa-brands fa-discord",tags:["social","discord","chat"],url:"https://discord.com/app",external:true},
 {id:"reddit",title:"Reddit",category:"social",icon:"fa-brands fa-reddit",tags:["social","reddit","forum"],url:"https://www.reddit.com/",external:true},
 {id:"instagram",title:"Instagram",category:"social",icon:"fa-brands fa-instagram",tags:["social","instagram","photos"],url:"https://www.instagram.com/",external:true},
 {id:"twitter",title:"Twitter / X",category:"social",icon:"fa-brands fa-x-twitter",tags:["social","twitter","x"],url:"https://twitter.com/",external:true},
-
-/* GAMES */
 {id:"roblox",title:"Roblox",category:"games",icon:"fa-solid fa-cube",tags:["gaming","roblox","3d"],url:"https://www.roblox.com/",external:true},
 {id:"minecraft",title:"Minecraft Classic",category:"games",icon:"fa-solid fa-cubes",tags:["gaming","minecraft","sandbox"],url:"https://classic.minecraft.net/",external:true},
-
-/* TOOLS */
 {id:"gmail",title:"Gmail",category:"tools",icon:"fa-solid fa-envelope",tags:["email","gmail","google"],url:"https://mail.google.com/",external:true},
 {id:"googledrive",title:"Google Drive",category:"tools",icon:"fa-brands fa-google-drive",tags:["cloud","drive","google"],url:"https://drive.google.com/",external:true},
 {id:"chatgpt",title:"ChatGPT",category:"tools",icon:"fa-solid fa-robot",tags:["ai","chatgpt","openai"],url:"https://chat.openai.com/",external:true},
-
-/* === DEFAULT GAMES === */
 {id:"2048",title:"2048",category:"games",icon:"fa-solid fa-table-cells",tags:["puzzle","numbers"],url:"https://play2048.co/"},
 {id:"snake",title:"Snake Classic",category:"games",icon:"fa-solid fa-worm",tags:["arcade","retro"],url:"https://www.google.com/logos/2010/pacman10-i.html"},
 {id:"basketball",title:"Basketball FRVR",category:"games",icon:"fa-solid fa-basketball",tags:["sports","basketball"],url:"https://basketball.frvr.com/"},
@@ -248,12 +234,12 @@ activeGame=g;
 playerGameTitle.textContent=g.title;
 playerCategory.innerHTML='<i class="fas fa-tag"></i> '+g.category;
 if(g.youtube){
-/* YouTube opens in the SAME modal as a player, no separate app header */
 gameIframe.style.display='none';
 ytUI.classList.add('active');
 playerModal.classList.add('active');
 document.body.style.overflow='hidden';
 ytPlayer.src='https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0';
+setTimeout(function(){ytSearchInput.focus();},200);
 return;
 }
 ytUI.classList.remove('active');
@@ -343,7 +329,6 @@ if(activeGame.youtube){window.open('https://www.youtube.com/','_blank','noopener
 window.open(activeGame.url,'_blank','noopener,noreferrer');
 }
 
-/* === YOUTUBE SEARCH === */
 function ytSearch(){
 var q=ytSearchInput.value.trim();
 if(q==='')return;
@@ -380,8 +365,11 @@ ytResults.innerHTML='<div class="yt-empty">Search error: '+err.message+'</div>';
 });
 }
 
-ytSearchBtn.addEventListener('click',ytSearch);
-ytSearchInput.addEventListener('keydown',function(e){if(e.key==='Enter'){ytSearch();}});
+ytSearchBtn.addEventListener('click',function(e){e.preventDefault();ytSearch();});
+ytSearchInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();ytSearch();}});
+ytSearchInput.addEventListener('keypress',function(e){e.stopPropagation();});
+ytSearchInput.addEventListener('keyup',function(e){e.stopPropagation();});
+ytSearchInput.addEventListener('input',function(e){e.stopPropagation();});
 
 filterChips.addEventListener('click',function(e){
 var chip=e.target.closest('.chip');if(!chip)return;
