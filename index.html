@@ -69,22 +69,21 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 <div class="wrapper">
 <header class="hero">
 <h1><i class="fas fa-gamepad"></i> Unblocked Arcade</h1>
-<p><i class="fas fa-infinity"></i> Play anytime, anywhere <span class="badge"><i class="fas fa-bolt"></i> <span id="gameCount">0</span> games</span></p>
+<p><i class="fas fa-infinity"></i> Play anytime, anywhere <span class="badge"><i class="fas fa-bolt"></i> <span id="gameCount">0</span> sites</span></p>
 </header>
 
 <div class="toolbar">
 <div class="search-box">
 <i class="fas fa-search"></i>
-<input type="text" id="searchInput" placeholder="Search games or type any URL (youtube.com, twitch.tv...)" autocomplete="off">
+<input type="text" id="searchInput" placeholder="Search sites or type any URL (youtube.com, twitch.tv...)" autocomplete="off">
 <button id="clearSearchBtn"><i class="fas fa-times"></i> <span>Clear</span></button>
 </div>
 <div class="filter-chips" id="filterChips">
 <div class="chip active" data-category="all"><i class="fas fa-layer-group"></i> All</div>
-<div class="chip" data-category="arcade"><i class="fas fa-joystick"></i> Arcade</div>
-<div class="chip" data-category="puzzle"><i class="fas fa-puzzle-piece"></i> Puzzle</div>
-<div class="chip" data-category="sports"><i class="fas fa-futbol"></i> Sports</div>
-<div class="chip" data-category="action"><i class="fas fa-bolt"></i> Action</div>
-<div class="chip" data-category="video"><i class="fab fa-youtube"></i> Video</div>
+<div class="chip" data-category="social"><i class="fas fa-users"></i> Social</div>
+<div class="chip" data-category="streaming"><i class="fas fa-play"></i> Streaming</div>
+<div class="chip" data-category="games"><i class="fas fa-gamepad"></i> Games</div>
+<div class="chip" data-category="tools"><i class="fas fa-wrench"></i> Tools</div>
 </div>
 </div>
 
@@ -100,8 +99,8 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 <div class="player-container">
 <div class="player-header">
 <div class="player-title">
-<i class="fas fa-gamepad"></i>
-<h2 id="playerGameTitle">Game Title</h2>
+<i class="fas fa-globe"></i>
+<h2 id="playerGameTitle">Site Title</h2>
 </div>
 <div class="player-actions">
 <button class="player-btn" id="openExternalBtn" title="Open in new tab"><i class="fas fa-external-link-alt"></i></button>
@@ -122,36 +121,44 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 
 <script>
 (function(){
+/* === SITES FIRST — 15 auto-unblocked platforms === */
 var games=[
-{id:"2048",title:"2048",category:"puzzle",icon:"fa-solid fa-table-cells",tags:["puzzle","numbers"],url:"https://play2048.co/"},
-{id:"snake",title:"Snake Classic",category:"arcade",icon:"fa-solid fa-worm",tags:["arcade","retro"],url:"https://www.google.com/logos/2010/pacman10-i.html"},
-{id:"basketball",title:"Basketball FRVR",category:"sports",icon:"fa-solid fa-basketball",tags:["sports","basketball"],url:"https://basketball.frvr.com/"},
-{id:"retrobowl",title:"Retro Bowl",category:"sports",icon:"fa-solid fa-football",tags:["sports","football"],url:"https://retro-bowl.org/"},
-{id:"tunnelrush",title:"Tunnel Rush",category:"action",icon:"fa-solid fa-bolt",tags:["action","fast"],url:"https://tunnelrush.io/"},
-{id:"doodlejump",title:"Doodle Jump",category:"arcade",icon:"fa-solid fa-arrow-up",tags:["arcade","jump"],url:"https://doodlejump.io/"},
-{id:"minesweeper",title:"Minesweeper",category:"puzzle",icon:"fa-solid fa-bomb",tags:["puzzle","classic"],url:"https://minesweeper.online/"},
-{id:"pacman",title:"Pac-Man",category:"arcade",icon:"fa-solid fa-ghost",tags:["arcade","retro"],url:"https://www.google.com/logos/2010/pacman10-i.html"},
-{id:"slope",title:"Slope",category:"action",icon:"fa-solid fa-chart-line",tags:["action","runner"],url:"https://slope-game.github.io/"},
-{id:"chess",title:"Chess",category:"puzzle",icon:"fa-solid fa-chess",tags:["puzzle","strategy"],url:"https://www.chess.com/play/computer"},
-{id:"soccerrandom",title:"Soccer Random",category:"sports",icon:"fa-solid fa-futbol",tags:["sports","funny"],url:"https://soccer-random.io/"},
-{id:"flappybird",title:"Flappy Bird",category:"arcade",icon:"fa-solid fa-dove",tags:["arcade","bird"],url:"https://flappybird.io/"},
+/* STREAMING / VIDEO */
+{id:"youtube",title:"YouTube",category:"streaming",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming","watch"],url:"https://www.youtube.com/embed/dQw4w9WgXcQ"},
+{id:"twitch",title:"Twitch",category:"streaming",icon:"fa-brands fa-twitch",tags:["streaming","twitch","live","gaming"],url:"https://player.twitch.tv/?channel=twitch&parent=localhost"},
+{id:"netflix",title:"Netflix",category:"streaming",icon:"fa-solid fa-film",tags:["video","netflix","movies","streaming"],url:"https://www.netflix.com/"},
+{id:"tiktok",title:"TikTok",category:"streaming",icon:"fa-brands fa-tiktok",tags:["video","tiktok","social","shorts"],url:"https://www.tiktok.com/embed/6718335390845095173"},
+{id:"soundcloud",title:"SoundCloud",category:"streaming",icon:"fa-brands fa-soundcloud",tags:["music","audio","soundcloud","streaming"],url:"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293"},
+{id:"spotify",title:"Spotify",category:"streaming",icon:"fa-brands fa-spotify",tags:["music","spotify","audio","streaming"],url:"https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M"},
 
-/* === AUTO-UNBLOCKED MAJOR PLATFORMS === */
-{id:"youtube",title:"YouTube",category:"video",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming"],url:"https://www.youtube.com/embed/dQw4w9WgXcQ"},
-{id:"soundcloud",title:"SoundCloud",category:"video",icon:"fa-brands fa-soundcloud",tags:["music","audio","soundcloud","streaming"],url:"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293"},
-{id:"twitch",title:"Twitch",category:"video",icon:"fa-brands fa-twitch",tags:["streaming","twitch","live","gaming"],url:"https://player.twitch.tv/?channel=twitch&parent=localhost"},
-{id:"tiktok",title:"TikTok",category:"video",icon:"fa-brands fa-tiktok",tags:["video","tiktok","social","shorts"],url:"https://www.tiktok.com/embed/6718335390845095173"},
-{id:"netflix",title:"Netflix",category:"video",icon:"fa-solid fa-film",tags:["video","netflix","movies","streaming"],url:"https://www.netflix.com/"},
-{id:"spotify",title:"Spotify",category:"video",icon:"fa-brands fa-spotify",tags:["music","spotify","audio","streaming"],url:"https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M"},
-{id:"reddit",title:"Reddit",category:"video",icon:"fa-brands fa-reddit",tags:["social","reddit","forum"],url:"https://www.reddit.com/"},
-{id:"discord",title:"Discord",category:"video",icon:"fa-brands fa-discord",tags:["social","discord","chat"],url:"https://discord.com/app"},
-{id:"instagram",title:"Instagram",category:"video",icon:"fa-brands fa-instagram",tags:["social","instagram","photos"],url:"https://www.instagram.com/"},
-{id:"twitter",title:"Twitter / X",category:"video",icon:"fa-brands fa-x-twitter",tags:["social","twitter","x"],url:"https://twitter.com/"},
-{id:"roblox",title:"Roblox",category:"action",icon:"fa-solid fa-cube",tags:["gaming","roblox","3d"],url:"https://www.roblox.com/"},
-{id:"minecraft",title:"Minecraft Classic",category:"action",icon:"fa-solid fa-cubes",tags:["gaming","minecraft","sandbox"],url:"https://classic.minecraft.net/"},
-{id:"gmail",title:"Gmail",category:"video",icon:"fa-solid fa-envelope",tags:["email","gmail","google"],url:"https://mail.google.com/"},
-{id:"googledrive",title:"Google Drive",category:"video",icon:"fa-brands fa-google-drive",tags:["cloud","drive","google"],url:"https://drive.google.com/"},
-{id:"chatgpt",title:"ChatGPT",category:"video",icon:"fa-solid fa-robot",tags:["ai","chatgpt","openai"],url:"https://chat.openai.com/"}
+/* SOCIAL */
+{id:"discord",title:"Discord",category:"social",icon:"fa-brands fa-discord",tags:["social","discord","chat"],url:"https://discord.com/app"},
+{id:"reddit",title:"Reddit",category:"social",icon:"fa-brands fa-reddit",tags:["social","reddit","forum"],url:"https://www.reddit.com/"},
+{id:"instagram",title:"Instagram",category:"social",icon:"fa-brands fa-instagram",tags:["social","instagram","photos"],url:"https://www.instagram.com/"},
+{id:"twitter",title:"Twitter / X",category:"social",icon:"fa-brands fa-x-twitter",tags:["social","twitter","x"],url:"https://twitter.com/"},
+
+/* GAMES */
+{id:"roblox",title:"Roblox",category:"games",icon:"fa-solid fa-cube",tags:["gaming","roblox","3d"],url:"https://www.roblox.com/"},
+{id:"minecraft",title:"Minecraft Classic",category:"games",icon:"fa-solid fa-cubes",tags:["gaming","minecraft","sandbox"],url:"https://classic.minecraft.net/"},
+
+/* TOOLS */
+{id:"gmail",title:"Gmail",category:"tools",icon:"fa-solid fa-envelope",tags:["email","gmail","google"],url:"https://mail.google.com/"},
+{id:"googledrive",title:"Google Drive",category:"tools",icon:"fa-brands fa-google-drive",tags:["cloud","drive","google"],url:"https://drive.google.com/"},
+{id:"chatgpt",title:"ChatGPT",category:"tools",icon:"fa-solid fa-robot",tags:["ai","chatgpt","openai"],url:"https://chat.openai.com/"},
+
+/* === DEFAULT GAMES === */
+{id:"2048",title:"2048",category:"games",icon:"fa-solid fa-table-cells",tags:["puzzle","numbers"],url:"https://play2048.co/"},
+{id:"snake",title:"Snake Classic",category:"games",icon:"fa-solid fa-worm",tags:["arcade","retro"],url:"https://www.google.com/logos/2010/pacman10-i.html"},
+{id:"basketball",title:"Basketball FRVR",category:"games",icon:"fa-solid fa-basketball",tags:["sports","basketball"],url:"https://basketball.frvr.com/"},
+{id:"retrobowl",title:"Retro Bowl",category:"games",icon:"fa-solid fa-football",tags:["sports","football"],url:"https://retro-bowl.org/"},
+{id:"tunnelrush",title:"Tunnel Rush",category:"games",icon:"fa-solid fa-bolt",tags:["action","fast"],url:"https://tunnelrush.io/"},
+{id:"doodlejump",title:"Doodle Jump",category:"games",icon:"fa-solid fa-arrow-up",tags:["arcade","jump"],url:"https://doodlejump.io/"},
+{id:"minesweeper",title:"Minesweeper",category:"games",icon:"fa-solid fa-bomb",tags:["puzzle","classic"],url:"https://minesweeper.online/"},
+{id:"pacman",title:"Pac-Man",category:"games",icon:"fa-solid fa-ghost",tags:["arcade","retro"],url:"https://www.google.com/logos/2010/pacman10-i.html"},
+{id:"slope",title:"Slope",category:"games",icon:"fa-solid fa-chart-line",tags:["action","runner"],url:"https://slope-game.github.io/"},
+{id:"chess",title:"Chess",category:"games",icon:"fa-solid fa-chess",tags:["puzzle","strategy"],url:"https://www.chess.com/play/computer"},
+{id:"soccerrandom",title:"Soccer Random",category:"games",icon:"fa-solid fa-futbol",tags:["sports","funny"],url:"https://soccer-random.io/"},
+{id:"flappybird",title:"Flappy Bird",category:"games",icon:"fa-solid fa-dove",tags:["arcade","bird"],url:"https://flappybird.io/"}
 ];
 
 var currentCategory="all",searchQuery="",activeGame=null;
@@ -210,9 +217,9 @@ return mCat&&mSearch;
 if(filtered.length===0){
 var directHTML='';
 if(searchQuery.trim()!==''&&isURL(searchQuery)){
-directHTML='<div class="no-results" style="border-color:#4f7aa6;background:#0f1d2e"><i class="fas fa-globe" style="color:#5f9ea0"></i><span>No matching game. Open as website?</span><button id="openDirectBtn" style="background:#1d3f5c;border:1px solid #6a9fd0;color:#e6f0ff;padding:.7rem 1.8rem;border-radius:3rem;cursor:pointer;font-size:.95rem;margin-top:.5rem"><i class="fas fa-external-link-alt"></i> Open '+searchQuery.trim()+'</button></div>';
+directHTML='<div class="no-results" style="border-color:#4f7aa6;background:#0f1d2e"><i class="fas fa-globe" style="color:#5f9ea0"></i><span>No matching site. Open as website?</span><button id="openDirectBtn" style="background:#1d3f5c;border:1px solid #6a9fd0;color:#e6f0ff;padding:.7rem 1.8rem;border-radius:3rem;cursor:pointer;font-size:.95rem;margin-top:.5rem"><i class="fas fa-external-link-alt"></i> Open '+searchQuery.trim()+'</button></div>';
 }else{
-directHTML='<div class="no-results"><i class="fas fa-search-minus"></i><span>No games found. Paste any URL (youtube.com, twitch.tv, etc.) to auto-unblock.</span></div>';
+directHTML='<div class="no-results"><i class="fas fa-search-minus"></i><span>No sites found. Paste any URL (youtube.com, twitch.tv, etc.) to auto-unblock.</span></div>';
 }
 grid.innerHTML=directHTML;
 var btn=document.getElementById('openDirectBtn');
