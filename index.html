@@ -102,28 +102,35 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 .sc-topbar input::placeholder{color:#888}
 .sc-topbar input:focus{border-color:#ff5500}
 .sc-topbar button{background:#ff5500;border:none;color:#fff;font-weight:600;padding:.6rem 1.2rem;border-radius:2rem;cursor:pointer;font-size:.85rem;display:flex;align-items:center;gap:.3rem}
-.sc-body{flex:1;display:flex;overflow:hidden;min-height:0}
-.sc-player-wrap{background:#000;flex:1;display:flex;flex-direction:column;min-width:0}
-.sc-player-frame{flex:1;display:flex;align-items:center;justify-content:center;padding:1rem}
-.sc-player-frame iframe{width:100%;height:200px;border:none;border-radius:.8rem}
-.sc-results{width:400px;overflow-y:auto;padding:.6rem;display:flex;flex-direction:column;gap:.5rem;background:#0f0f0f;border-left:1px solid #272727;flex-shrink:0}
-.sc-results::-webkit-scrollbar{width:8px}
-.sc-results::-webkit-scrollbar-thumb{background:#303030;border-radius:4px}
-.sc-item{cursor:pointer;display:flex;gap:.6rem;padding:.4rem;border-radius:.6rem;transition:background .15s;align-items:center}
-.sc-item:hover{background:#272727}
-.sc-item img{width:60px;height:60px;object-fit:cover;border-radius:.5rem;flex-shrink:0;background:#222}
-.sc-item .sc-meta{display:flex;flex-direction:column;gap:.15rem;min-width:0}
-.sc-item .sc-meta h4{font-size:.85rem;font-weight:600;color:#fff;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.sc-item .sc-meta span{font-size:.72rem;color:#aaa}
-.sc-debug{font-size:.7rem;color:#5a6a7a;padding:.3rem .6rem;background:#0a0f16;border-radius:.4rem;margin-bottom:.4rem;font-family:monospace}
+.sc-list{flex:1;overflow-y:auto;padding:.8rem;display:flex;flex-direction:column;gap:.6rem}
+.sc-list::-webkit-scrollbar{width:8px}
+.sc-list::-webkit-scrollbar-thumb{background:#303030;border-radius:4px}
+.sc-track{cursor:pointer;display:flex;gap:.7rem;padding:.7rem;background:#181818;border-radius:.8rem;transition:background .15s;align-items:center;border:1px solid #272727}
+.sc-track:hover{background:#242424;border-color:#ff5500}
+.sc-track .sc-play{width:44px;height:44px;border-radius:50%;background:#ff5500;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:1rem}
+.sc-track .sc-meta{display:flex;flex-direction:column;gap:.15rem;min-width:0}
+.sc-track .sc-meta h4{font-size:.9rem;font-weight:600;color:#fff;line-height:1.3}
+.sc-track .sc-meta span{font-size:.75rem;color:#aaa}
+.sc-player-bar{padding:.6rem .8rem;background:#111;border-top:1px solid #222;flex-shrink:0}
+.sc-player-bar iframe{width:100%;height:120px;border:none;border-radius:.6rem;display:block}
+
+.ddg-ui{display:none;flex-direction:column;width:100%;height:100%;background:#fff;color:#222;overflow:hidden}
+.ddg-ui.active{display:flex}
+.ddg-topbar{display:flex;align-items:center;gap:.5rem;padding:.6rem .8rem;background:#de5833;flex-shrink:0}
+.ddg-topbar input{flex:1;background:#fff;border:none;border-radius:2rem;padding:.7rem 1.2rem;color:#222;font-size:.95rem;outline:none}
+.ddg-topbar input::placeholder{color:#888}
+.ddg-topbar button{background:rgba(0,0,0,.2);border:none;color:#fff;font-weight:600;padding:.7rem 1.3rem;border-radius:2rem;cursor:pointer;font-size:.85rem;display:flex;align-items:center;gap:.3rem}
+.ddg-topbar button:hover{background:rgba(0,0,0,.3)}
+.ddg-frame{flex:1;background:#fff}
+.ddg-frame iframe{width:100%;height:100%;border:none;display:block;background:#fff}
 
 .player-footer{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.2rem;background:#101b29;border-top:1px solid #1e2c3c;font-size:.8rem;color:#7b8fa6;flex-shrink:0;gap:1rem;flex-wrap:wrap}
 .player-footer i{color:#4f7aa6;margin-right:.3rem}
 #playerCategory{text-transform:uppercase;letter-spacing:.5px;font-weight:600;color:#8fb0d0}
 .footer{text-align:center;padding:1.5rem 0 .8rem;color:#4f617a;border-top:1px solid #1c2533;font-size:.85rem;margin-top:1rem;display:flex;justify-content:center;align-items:center;gap:1.2rem;flex-wrap:wrap}
 .footer i{color:#3f5a78;margin-right:.3rem}
-@media (max-width:900px){.yt-results{width:280px}.sc-results{width:300px}}
-@media (max-width:700px){.player-container{height:95vh;border-radius:1rem}.player-header{padding:.7rem .9rem}.player-title h2{font-size:1rem}.player-btn{width:34px;height:34px;font-size:.85rem}.player-footer{font-size:.7rem;padding:.5rem .9rem}.player-footer span:last-child{display:none}.yt-body{flex-direction:column}.yt-results{width:100%;border-left:none;border-top:1px solid #272727;max-height:40%}.sc-body{flex-direction:column}.sc-results{width:100%;border-left:none;border-top:1px solid #272727;max-height:40%}}
+@media (max-width:900px){.yt-results{width:280px}}
+@media (max-width:700px){.player-container{height:95vh;border-radius:1rem}.player-header{padding:.7rem .9rem}.player-title h2{font-size:1rem}.player-btn{width:34px;height:34px;font-size:.85rem}.player-footer{font-size:.7rem;padding:.5rem .9rem}.player-footer span:last-child{display:none}.yt-body{flex-direction:column}.yt-results{width:100%;border-left:none;border-top:1px solid #272727;max-height:40%}}
 @media (max-width:550px){.hero h1{font-size:1.8rem}.hero{padding:1.5rem}.grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem}.search-box{padding-left:1rem}.search-box button span{display:none}.search-box button{padding:.7rem 1rem}}
 </style>
 </head>
@@ -142,6 +149,7 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 </div>
 <div class="filter-chips" id="filterChips">
 <div class="chip active" data-category="all"><i class="fas fa-layer-group"></i> All</div>
+<div class="chip" data-category="search"><i class="fas fa-magnifying-glass"></i> Search</div>
 <div class="chip" data-category="streaming"><i class="fas fa-play"></i> Streaming</div>
 <div class="chip" data-category="games"><i class="fas fa-gamepad"></i> Games</div>
 </div>
@@ -197,18 +205,22 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 
 <div class="sc-ui" id="scUI">
 <div class="sc-topbar">
-<input type="text" id="scSearchInput" placeholder="Search SoundCloud songs, artists..." autocomplete="off" spellcheck="false">
-<button id="scSearchBtn"><i class="fas fa-search"></i> Search</button>
+<input type="text" id="scFilterInput" placeholder="Filter tracks by name..." autocomplete="off" spellcheck="false">
+<button id="scFilterBtn"><i class="fas fa-filter"></i> Filter</button>
 </div>
-<div class="sc-body">
-<div class="sc-player-wrap">
-<div class="sc-player-frame">
+<div class="sc-list" id="scList"></div>
+<div class="sc-player-bar">
 <iframe id="scPlayer" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/293&color=%23ff5500" allow="autoplay"></iframe>
 </div>
 </div>
-<div class="sc-results" id="scResults">
-<div class="yt-empty">Search for a song. Results appear here, click to play.</div>
+
+<div class="ddg-ui" id="ddgUI">
+<div class="ddg-topbar">
+<input type="text" id="ddgSearchInput" placeholder="Search DuckDuckGo..." autocomplete="off" spellcheck="false">
+<button id="ddgSearchBtn"><i class="fas fa-search"></i> Search</button>
 </div>
+<div class="ddg-frame">
+<iframe id="ddgFrame" src="https://html.duckduckgo.com/html/" allowfullscreen></iframe>
 </div>
 </div>
 
@@ -226,20 +238,24 @@ body{background:#0b0f17;color:#eef2ff;line-height:1.5;padding:1rem;min-height:10
 window.open = function(){ return null; };
 
 var YT_API_KEY = "AIzaSyCHKIjtv0LjNaaUT2euBuxwr7GE1D85IKU";
-var SC_CLIENT_ID = "Pb72ranhoyt6gw7hM7TkzUItXlMWSNSo";
 
-/* Multiple CORS proxies, tried in order */
-var SC_PROXIES = [
-"https://api.allorigins.win/raw?url=",
-"https://api.codetabs.com/v1/proxy?quest=",
-"https://corsproxy.io/?url=",
-"https://thingproxy.freeboard.io/fetch/"
+/* SoundCloud fixed tracks. Add or remove lines to change the list. */
+var scTracks=[
+{title:"Flickermood",artist:"Forss",url:"https://soundcloud.com/forss/flickermood"},
+{title:"Flickermood (Instrumental)",artist:"Forss",url:"https://soundcloud.com/forss/flickermood-instrumental"},
+{title:"SoulFul",artist:"Forss",url:"https://soundcloud.com/forss/soulful"},
+{title:"Journeyman",artist:"Forss",url:"https://soundcloud.com/forss/journeyman"},
+{title:"Fuse",artist:"Forss",url:"https://soundcloud.com/forss/fuse"},
+{title:"Chapters",artist:"Forss",url:"https://soundcloud.com/forss/chapters"},
+{title:"Atomised",artist:"Forss",url:"https://soundcloud.com/forss/atomised"},
+{title:"September",artist:"Forss",url:"https://soundcloud.com/forss/september"}
 ];
 
 var games=[
+{id:"duckduckgo",title:"DuckDuckGo",category:"search",icon:"fa-solid fa-magnifying-glass",tags:["search","duckduckgo","web","browse"],ddg:true},
 {id:"youtube",title:"YouTube",category:"streaming",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming","watch"],youtube:true},
 {id:"shorts",title:"Shorts",category:"streaming",icon:"fa-solid fa-mobile-screen",tags:["shorts","tiktok","fyp","vertical","video"],shorts:true},
-{id:"soundcloud",title:"SoundCloud",category:"streaming",icon:"fa-brands fa-soundcloud",tags:["music","audio","soundcloud","search"],soundcloud:true},
+{id:"soundcloud",title:"SoundCloud",category:"streaming",icon:"fa-brands fa-soundcloud",tags:["music","audio","soundcloud"],soundcloud:true},
 {id:"twitch",title:"Twitch",category:"streaming",icon:"fa-brands fa-twitch",tags:["streaming","twitch","live","gaming"],embedUrl:"twitch-auto"},
 {id:"spotify",title:"Spotify",category:"streaming",icon:"fa-brands fa-spotify",tags:["music","spotify","audio"],embedUrl:"https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M"},
 
@@ -283,10 +299,15 @@ var shortsSearchBtn=document.getElementById('shortsSearchBtn');
 var shortsFeed=document.getElementById('shortsFeed');
 
 var scUI=document.getElementById('scUI');
-var scSearchInput=document.getElementById('scSearchInput');
-var scSearchBtn=document.getElementById('scSearchBtn');
-var scResults=document.getElementById('scResults');
+var scFilterInput=document.getElementById('scFilterInput');
+var scFilterBtn=document.getElementById('scFilterBtn');
+var scList=document.getElementById('scList');
 var scPlayer=document.getElementById('scPlayer');
+
+var ddgUI=document.getElementById('ddgUI');
+var ddgSearchInput=document.getElementById('ddgSearchInput');
+var ddgSearchBtn=document.getElementById('ddgSearchBtn');
+var ddgFrame=document.getElementById('ddgFrame');
 
 gameCountSpan.textContent=games.length;
 
@@ -310,6 +331,7 @@ function hideAllUIs(){
 ytUI.classList.remove('active');
 shortsUI.classList.remove('active');
 scUI.classList.remove('active');
+ddgUI.classList.remove('active');
 gameIframe.style.display='none';
 }
 
@@ -318,6 +340,15 @@ activeGame=g;
 playerGameTitle.textContent=g.title;
 playerCategory.innerHTML='<i class="fas fa-tag"></i> '+g.category;
 
+if(g.ddg){
+hideAllUIs();
+ddgUI.classList.add('active');
+playerModal.classList.add('active');
+document.body.style.overflow='hidden';
+ddgFrame.src='https://html.duckduckgo.com/html/';
+setTimeout(function(){ddgSearchInput.focus();},200);
+return;
+}
 if(g.youtube){
 hideAllUIs();
 ytUI.classList.add('active');
@@ -340,7 +371,8 @@ hideAllUIs();
 scUI.classList.add('active');
 playerModal.classList.add('active');
 document.body.style.overflow='hidden';
-setTimeout(function(){scSearchInput.focus();},200);
+renderScTracks('');
+setTimeout(function(){scFilterInput.focus();},200);
 return;
 }
 
@@ -384,6 +416,7 @@ setTimeout(function(){
 if(!playerModal.classList.contains('active')){
 gameIframe.src='about:blank';
 ytPlayer.src='about:blank';
+ddgFrame.src='about:blank';
 shortsFeed.innerHTML='<div class="shorts-empty">Loading feed...</div>';
 hideAllUIs();
 gameIframe.style.display='block';
@@ -394,6 +427,7 @@ activeGame=null;
 
 function reloadGame(){
 if(!activeGame)return;
+if(activeGame.ddg){ddgFrame.src='https://html.duckduckgo.com/html/';return;}
 if(activeGame.youtube){
 ytPlayer.src='about:blank';
 setTimeout(function(){ytPlayer.src='https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&rel=0';},50);
@@ -410,6 +444,16 @@ var w=document.querySelector('.player-frame-wrapper');
 if(!document.fullscreenElement){w.requestFullscreen().catch(function(e){console.log(e)})}else{document.exitFullscreen()}
 }
 
+/* ==== DuckDuckGo ==== */
+function ddgSearch(){
+var q=ddgSearchInput.value.trim();
+if(q===''){ddgFrame.src='https://html.duckduckgo.com/html/';return;}
+ddgFrame.src='https://html.duckduckgo.com/html/?q='+encodeURIComponent(q);
+}
+ddgSearchBtn.addEventListener('click',function(e){e.preventDefault();ddgSearch();});
+ddgSearchInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();ddgSearch();}});
+
+/* ==== YouTube ==== */
 function ytSearch(){
 var q=ytSearchInput.value.trim();
 if(q==='')return;
@@ -439,6 +483,7 @@ ytPlayer.src='https://www.youtube.com/embed/'+vid+'?autoplay=1&rel=0';
 ytSearchBtn.addEventListener('click',function(e){e.preventDefault();ytSearch();});
 ytSearchInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();ytSearch();}});
 
+/* ==== Shorts ==== */
 function loadShortsFYP(){
 shortsFeed.innerHTML='<div class="shorts-empty"><i class="fas fa-spinner fa-spin"></i><br><br>Loading feed...</div>';
 var q=encodeURIComponent('shorts viral');
@@ -477,61 +522,26 @@ shortsSearchInput.addEventListener('keydown',function(e){
 if(e.key==='Enter'){e.preventDefault();shortsSearchBtn.click();}
 });
 
-/* ===== SOUNDCLOUD SEARCH ===== */
-/* Uses multiple CORS proxies. If a proxy returns non-JSON or empty, it tries the next. */
-function scSearch(){
-var q=scSearchInput.value.trim();
-if(q==='')return;
-scResults.innerHTML='<div class="yt-loading"><i class="fas fa-spinner fa-spin"></i> Searching SoundCloud (trying '+SC_PROXIES.length+' proxies)...</div>';
-var target='https://api-v2.soundcloud.com/search/tracks?q='+encodeURIComponent(q)+'&client_id='+SC_CLIENT_ID+'&limit=30&app_version=1789138724&app_locale=en';
-tryProxies(0,target,[]);
-}
-
-function tryProxies(i,target,log){
-if(i>=SC_PROXIES.length){
-scResults.innerHTML='<div class="yt-empty">All CORS proxies failed or returned no results.<br><br><span style="font-size:.75rem;color:#5a6a7a">Attempts:<br>'+log.join('<br>')+'</span></div>';
-return;
-}
-var proxyName=SC_PROXIES[i].split('/')[2];
-var url=SC_PROXIES[i]+encodeURIComponent(target);
-fetch(url,{method:'GET'}).then(function(r){
-if(!r.ok)throw new Error('HTTP '+r.status);
-return r.text();
-}).then(function(txt){
-var data;
-try{data=JSON.parse(txt);}catch(e){
-log.push(proxyName+': non-JSON');
-throw new Error('non-JSON');
-}
-if(!data.collection||data.collection.length===0){
-log.push(proxyName+': empty collection');
-throw new Error('empty');
-}
-log.push(proxyName+': OK ('+data.collection.length+' tracks)');
-console.log('SoundCloud search via '+proxyName+':',data.collection.length+' tracks');
-var html='<div class="sc-debug">via '+proxyName+'</div>';
-data.collection.forEach(function(t){
-if(!t||!t.permalink_url)return;
-var title=t.title||'Untitled';
-var user=t.user&&t.user.username?t.user.username:'Unknown';
-var art=t.artwork_url||(t.user&&t.user.avatar_url)||'';
-html+='<div class="sc-item" data-sc="'+t.permalink_url+'">'+(art?'<img src="'+art+'">':'')+'<div class="sc-meta"><h4>'+title+'</h4><span>'+user+'</span></div></div>';
+/* ==== SoundCloud (fixed track list, client-side filter) ==== */
+function renderScTracks(filter){
+var f=filter.toLowerCase();
+var html='';
+scTracks.forEach(function(t){
+if(f&&t.title.toLowerCase().indexOf(f)===-1&&t.artist.toLowerCase().indexOf(f)===-1)return;
+html+='<div class="sc-track" data-url="'+t.url+'"><div class="sc-play"><i class="fas fa-play"></i></div><div class="sc-meta"><h4>'+t.title+'</h4><span>'+t.artist+'</span></div></div>';
 });
-scResults.innerHTML=html;
-document.querySelectorAll('#scResults .sc-item').forEach(function(el){
+if(html===''){html='<div class="yt-empty">No tracks match "'+filter+'".</div>';}
+scList.innerHTML=html;
+document.querySelectorAll('#scList .sc-track').forEach(function(el){
 el.addEventListener('click',function(){
-var trackUrl=el.getAttribute('data-sc');
+var trackUrl=el.getAttribute('data-url');
 scPlayer.src='https://w.soundcloud.com/player/?url='+encodeURIComponent(trackUrl)+'&color=%23ff5500&auto_play=true';
 });
 });
-}).catch(function(err){
-log.push(proxyName+': '+err.message);
-tryProxies(i+1,target,log);
-});
 }
-
-scSearchBtn.addEventListener('click',function(e){e.preventDefault();scSearch();});
-scSearchInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();scSearch();}});
+scFilterBtn.addEventListener('click',function(e){e.preventDefault();renderScTracks(scFilterInput.value.trim());});
+scFilterInput.addEventListener('input',function(e){renderScTracks(e.target.value.trim());});
+scFilterInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();renderScTracks(scFilterInput.value.trim());}});
 
 filterChips.addEventListener('click',function(e){
 var chip=e.target.closest('.chip');if(!chip)return;
