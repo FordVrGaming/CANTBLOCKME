@@ -226,7 +226,14 @@ window.open = function(){ return null; };
 
 var YT_API_KEY = "AIzaSyCHKIjtv0LjNaaUT2euBuxwr7GE1D85IKU";
 var SC_CLIENT_ID = "Pb72ranhoyt6gw7hM7TkzUItXlMWSNSo";
-var SC_PROXY = "https://corsproxy.io/?url=";
+
+/* Multiple CORS proxies tried in order until one succeeds */
+var SC_PROXIES = [
+"https://api.allorigins.win/raw?url=",
+"https://corsproxy.io/?url=",
+"https://thingproxy.freeboard.io/fetch/",
+"https://api.codetabs.com/v1/proxy?quest="
+];
 
 var games=[
 {id:"youtube",title:"YouTube",category:"streaming",icon:"fa-brands fa-youtube",tags:["video","youtube","music","streaming","watch"],youtube:true},
@@ -469,14 +476,25 @@ shortsSearchInput.addEventListener('keydown',function(e){
 if(e.key==='Enter'){e.preventDefault();shortsSearchBtn.click();}
 });
 
-/* SoundCloud search via CORS proxy */
+/* SoundCloud: try each proxy until one returns valid JSON */
 function scSearch(){
 var q=scSearchInput.value.trim();
 if(q==='')return;
 scResults.innerHTML='<div class="yt-loading"><i class="fas fa-spinner fa-spin"></i> Searching SoundCloud...</div>';
 var target='https://api-v2.soundcloud.com/search/tracks?q='+encodeURIComponent(q)+'&client_id='+SC_CLIENT_ID+'&limit=30&app_version=1789138724&app_locale=en';
-var url=SC_PROXY+encodeURIComponent(target);
-fetch(url).then(function(r){return r.json()}).then(function(data){
+tryProxies(0,target);
+}
+
+function tryProxies(i,target){
+if(i>=SC_PROXIES.length){
+scResults.innerHTML='<div class="yt-empty">All CORS proxies failed. Your network is blocking them. SoundCloud search cannot work here.</div>';
+return;
+}
+var url=SC_PROXIES[i]+encodeURIComponent(target);
+fetch(url,{method:'GET'}).then(function(r){
+if(!r.ok)throw new Error('HTTP '+r.status);
+return r.json();
+}).then(function(data){
 if(!data.collection||data.collection.length===0){
 scResults.innerHTML='<div class="yt-empty">No tracks found.</div>';
 return;
@@ -496,10 +514,11 @@ var trackUrl=el.getAttribute('data-sc');
 scPlayer.src='https://w.soundcloud.com/player/?url='+encodeURIComponent(trackUrl)+'&color=%23ff5500&auto_play=true';
 });
 });
-}).catch(function(err){
-scResults.innerHTML='<div class="yt-empty">Search error: '+err.message+'</div>';
+}).catch(function(){
+tryProxies(i+1,target);
 });
 }
+
 scSearchBtn.addEventListener('click',function(e){e.preventDefault();scSearch();});
 scSearchInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();scSearch();}});
 
